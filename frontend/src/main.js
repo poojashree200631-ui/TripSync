@@ -651,3 +651,106 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
   });
 
 });
+// =========================================================
+// SEARCH FUNCTIONALITY
+// =========================================================
+
+const searchButton = document.querySelector(".search-button");
+
+if (searchButton) {
+  searchButton.addEventListener("click", () => {
+    const activeTab = document.querySelector(".search-tab.active");
+
+    const fromInput = document.querySelector(
+      '.field input[placeholder="Departure city"]'
+    );
+
+    const toInput = document.querySelector(
+      '.field input[placeholder="Destination city"]'
+    );
+
+    const dateInput = document.querySelector('.field input[type="date"]');
+
+    const passengerSelect = document.querySelector(".field select");
+
+    const from = fromInput?.value.trim();
+    const to = toInput?.value.trim();
+    const date = dateInput?.value;
+    const passengers = passengerSelect?.value;
+
+    const transport = activeTab
+      ? activeTab.textContent.replace(/[🚌🚆✈️]/g, "").trim()
+      : "Bus";
+
+    // Validation
+    if (!from || !to || !date) {
+      alert("Please enter your departure, destination and travel date.");
+      return;
+    }
+
+    if (from.toLowerCase() === to.toLowerCase()) {
+      alert("Departure and destination cannot be the same.");
+      return;
+    }
+
+    // Save search temporarily
+    const searchData = {
+      transport,
+      from,
+      to,
+      date,
+      passengers
+    };
+
+    sessionStorage.setItem(
+      "tripSyncSearch",
+      JSON.stringify(searchData)
+    );
+
+    console.log("TripSync Search:", searchData);
+
+    // Show confirmation
+    alert(
+      `Searching ${transport} journeys\\n\\n` +
+      `${from} → ${to}\\n` +
+      `Date: ${date}\\n` +
+      `${passengers}`
+    );
+  });
+}
+
+
+// =========================================================
+// LOGIN / SIGN UP BUTTONS
+// =========================================================
+
+const loginButton = document.querySelector(".nav-btn:not(.primary)");
+const signupButton = document.querySelector(".nav-btn.primary");
+
+if (loginButton) {
+  loginButton.addEventListener("click", () => {
+    alert("TripSync Login — coming next!");
+  });
+}
+
+if (signupButton) {
+  signupButton.addEventListener("click", () => {
+    alert("TripSync Sign Up — coming next!");
+  });
+}
+
+
+// =========================================================
+// PREFERENCE SELECTION
+// =========================================================
+
+const selectedPreferences = () => {
+  return [...document.querySelectorAll(".preference-chip.selected")]
+    .map((chip) => chip.textContent.trim());
+};
+
+preferenceChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    console.log("Selected preferences:", selectedPreferences());
+  });
+});
