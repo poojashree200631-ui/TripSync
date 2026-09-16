@@ -3,282 +3,740 @@ import "./style.css";
 const app = document.querySelector("#app");
 
 app.innerHTML = `
+  <!-- =====================================================
+       NAVBAR
+       ===================================================== -->
+
   <header class="navbar">
-    <a href="#" class="logo">
+
+    <a href="#home" class="logo">
       <div class="logo-icon">✦</div>
       Trip<span>Sync</span>
     </a>
 
     <nav class="nav-links">
       <a href="#home">Home</a>
-      <a href="#trips">Explore</a>
-      <a href="#experience">Experience</a>
+      <a href="#discover">Discover</a>
+      <a href="#experience">Your Experience</a>
       <a href="#how-it-works">How It Works</a>
     </nav>
 
     <div class="nav-actions">
-      <button class="nav-btn">Login</button>
-      <button class="nav-btn primary">Sign Up</button>
+      <button class="nav-btn" id="loginBtn">
+        Log in
+      </button>
+
+      <button class="nav-btn primary" id="signupBtn">
+        Get Started
+      </button>
     </div>
+
   </header>
+
 
   <main>
 
-    <!-- HERO -->
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
     <section class="hero" id="home">
+
       <div class="hero-content">
 
         <div class="hero-badge">
-          ✦ Smart travel. Better journeys.
+          ✦ TRAVEL, SYNCHRONIZED AROUND YOU
         </div>
 
         <h1>
-          Your journey,
-          <br />
-          <span>synced perfectly.</span>
+          Go somewhere
+          <span>worth remembering.</span>
         </h1>
 
         <p>
-          Book buses, trains and flights in one seamless experience.
-          Tell TripSync how you want to travel — we'll help find the
-          experience that fits you.
+          Discover journeys, choose how you want to travel,
+          and let TripSync create an experience that feels
+          made for you.
         </p>
 
         <div class="hero-buttons">
-          <a href="#search" class="btn btn-primary">
-            Start Exploring →
+
+          <a href="#plan" class="btn btn-primary">
+            I want to travel
+            <span>→</span>
           </a>
 
           <a href="#experience" class="btn btn-light">
             Discover TripSync
           </a>
+
+        </div>
+
+        <div class="hero-trust">
+
+          <div class="trust-item">
+            <strong>3</strong>
+            <span>ways to travel</span>
+          </div>
+
+          <div class="trust-divider"></div>
+
+          <div class="trust-item">
+            <strong>∞</strong>
+            <span>ways to experience it</span>
+          </div>
+
         </div>
 
       </div>
-    </section>
 
-    <!-- SEARCH -->
-    <div class="search-wrapper" id="search">
-      <div class="search-card">
 
-        <div class="search-tabs">
-          <button class="search-tab active">🚌 Bus</button>
-          <button class="search-tab">🚆 Train</button>
-          <button class="search-tab">✈️ Flight</button>
+      <!-- HERO VISUAL -->
+
+      <div class="hero-visual">
+
+        <div class="hero-image-card">
+
+          <img
+            src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85"
+            alt="Mountain travel destination"
+          />
+
+          <div class="image-overlay"></div>
+
+          <div class="destination-label">
+
+            <span>✦ NEXT ADVENTURE</span>
+
+            <h3>Somewhere beautiful.</h3>
+
+            <p>
+              The journey matters too.
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="search-fields">
 
-          <div class="field">
+        <div class="floating-card floating-card-top">
+
+          <div class="floating-icon">✈️</div>
+
+          <div>
+            <small>YOUR JOURNEY</small>
+            <strong>Ready to begin?</strong>
+          </div>
+
+        </div>
+
+
+        <div class="floating-card floating-card-bottom">
+
+          <span class="mini-avatar">✦</span>
+
+          <div>
+            <strong>TripSync Match</strong>
+            <small>Experience tailored to you</small>
+          </div>
+
+          <b>96%</b>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PLAN YOUR JOURNEY
+         ===================================================== -->
+
+    <section class="plan-section" id="plan">
+
+      <div class="plan-card">
+
+        <div class="plan-heading">
+
+          <div>
+            <span class="eyebrow">PLAN YOUR JOURNEY</span>
+
+            <h2>
+              Where do you want to go?
+            </h2>
+          </div>
+
+          <p>
+            Search buses, trains and flights —
+            all in one place.
+          </p>
+
+        </div>
+
+
+        <div class="travel-modes">
+
+          <button class="travel-mode active" data-mode="Bus">
+            <span>🚌</span>
+            Bus
+          </button>
+
+          <button class="travel-mode" data-mode="Train">
+            <span>🚆</span>
+            Train
+          </button>
+
+          <button class="travel-mode" data-mode="Flight">
+            <span>✈️</span>
+            Flight
+          </button>
+
+        </div>
+
+
+        <div class="journey-form">
+
+          <div class="journey-field">
+
             <label>FROM</label>
-            <input type="text" placeholder="Departure city" />
+
+            <div class="input-wrap">
+              <span>📍</span>
+
+              <input
+                id="fromCity"
+                type="text"
+                placeholder="Departure city"
+              />
+            </div>
+
           </div>
 
-          <div class="field">
+
+          <button class="swap-journey" id="swapJourney">
+            ⇄
+          </button>
+
+
+          <div class="journey-field">
+
             <label>TO</label>
-            <input type="text" placeholder="Destination city" />
+
+            <div class="input-wrap">
+              <span>📍</span>
+
+              <input
+                id="toCity"
+                type="text"
+                placeholder="Where to?"
+              />
+            </div>
+
           </div>
 
-          <div class="field">
-            <label>DATE</label>
-            <input type="date" />
+
+          <div class="journey-field">
+
+            <label>WHEN</label>
+
+            <div class="input-wrap">
+              <span>📅</span>
+
+              <input
+                id="travelDate"
+                type="date"
+              />
+            </div>
+
           </div>
 
-          <div class="field">
-            <label>PASSENGERS</label>
-            <select>
-              <option>1 Passenger</option>
-              <option>2 Passengers</option>
-              <option>3 Passengers</option>
-              <option>4 Passengers</option>
-              <option>5+ Passengers</option>
-            </select>
+
+          <div class="journey-field">
+
+            <label>TRAVELERS</label>
+
+            <div class="input-wrap">
+              <span>👥</span>
+
+              <select id="travelerCount">
+
+                <option value="1">
+                  1 Traveler
+                </option>
+
+                <option value="2">
+                  2 Travelers
+                </option>
+
+                <option value="3">
+                  3 Travelers
+                </option>
+
+                <option value="4">
+                  4 Travelers
+                </option>
+
+                <option value="5">
+                  5 Travelers
+                </option>
+
+              </select>
+
+            </div>
+
           </div>
 
-          <button class="search-button">
+
+          <button
+            class="journey-search"
+            id="journeySearch"
+          >
             Search
+            <span>→</span>
           </button>
 
         </div>
 
       </div>
-    </div>
 
-    <!-- EXPERIENCE -->
-    <section class="experience-section" id="trips">
+    </section>
 
-      <div class="section-heading">
-        <div class="eyebrow">ONE PLATFORM</div>
 
-        <h2>
-          Travel your way.
-        </h2>
+    <!-- =====================================================
+         DISCOVER
+         ===================================================== -->
+
+    <section class="discover-section" id="discover">
+
+      <div class="section-heading left-heading">
+
+        <div>
+
+          <span class="eyebrow">
+            FIND YOUR NEXT PLACE
+          </span>
+
+          <h2>
+            Go beyond the usual.
+          </h2>
+
+        </div>
 
         <p>
-          One place for every journey, whether you're crossing a city
-          or crossing the country.
+          Inspiration for the journeys waiting
+          to become memories.
         </p>
+
       </div>
 
-      <div class="experience-grid">
 
-        <article class="experience-card">
-          <div class="experience-icon">🚌</div>
+      <div class="destination-grid">
 
-          <h3>Bus</h3>
 
-          <p>
-            Find comfortable routes and choose the experience
-            that matches your preferences.
-          </p>
+        <article class="destination-card destination-large">
 
-          <div class="card-arrow">→</div>
+          <img
+            src="https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=85"
+            alt="Tropical destination"
+          />
+
+          <div class="destination-gradient"></div>
+
+          <div class="destination-content">
+
+            <span>ISLAND ESCAPE</span>
+
+            <h3>
+              Find your little
+              piece of paradise.
+            </h3>
+
+            <p>
+              Slow mornings. Blue water.
+              New memories.
+            </p>
+
+          </div>
+
         </article>
 
-        <article class="experience-card">
-          <div class="experience-icon">🚆</div>
 
-          <h3>Train</h3>
+        <article class="destination-card">
 
-          <p>
-            Discover available journeys and choose seats or berths
-            based on how you want to travel.
-          </p>
+          <img
+            src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=900&q=85"
+            alt="European city"
+          />
 
-          <div class="card-arrow">→</div>
+          <div class="destination-gradient"></div>
+
+          <div class="destination-content">
+
+            <span>CITY ESCAPE</span>
+
+            <h3>
+              Wander somewhere new.
+            </h3>
+
+          </div>
+
         </article>
 
-        <article class="experience-card">
-          <div class="experience-icon">✈️</div>
 
-          <h3>Flight</h3>
+        <article class="destination-card">
 
-          <p>
-            Search flights and let TripSync help you find a seat
-            that fits your journey.
-          </p>
+          <img
+            src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=900&q=85"
+            alt="Mountain lake"
+          />
 
-          <div class="card-arrow">→</div>
+          <div class="destination-gradient"></div>
+
+          <div class="destination-content">
+
+            <span>ADVENTURE</span>
+
+            <h3>
+              Take the scenic route.
+            </h3>
+
+          </div>
+
         </article>
 
       </div>
 
     </section>
 
-    <!-- CHOOSE YOUR EXPERIENCE -->
-    <section class="preference-section" id="experience">
 
-      <div class="section-heading">
-        <div class="eyebrow">THE TRIPSYNC DIFFERENCE</div>
+    <!-- =====================================================
+         CHOOSE YOUR EXPERIENCE
+         ===================================================== -->
+
+    <section class="experience-section" id="experience">
+
+      <div class="experience-intro">
+
+        <span class="eyebrow">
+          THE TRIPSYNC DIFFERENCE
+        </span>
 
         <h2>
-          Choose your experience.
+          Don't just choose
+          <span>a seat.</span>
         </h2>
 
         <p>
-          Don't just choose a seat. Tell us what matters to you.
+          Choose how you want the journey to feel.
         </p>
+
+        <p class="experience-description">
+          Tell TripSync what matters to you and we'll
+          find available options that match your preferences.
+        </p>
+
       </div>
 
-      <div class="preference-container">
 
-        <div class="preference-content">
+      <div class="experience-panel">
+
+        <div class="experience-panel-header">
+
+          <div>
+            <span>YOUR PREFERENCES</span>
+
+            <h3>
+              What matters to you?
+            </h3>
+          </div>
+
+          <span class="preference-count">
+            1 selected
+          </span>
+
+        </div>
+
+
+        <div class="preference-grid">
+
+          <button
+            class="preference-chip selected"
+            data-preference="Window"
+          >
+            <span>🪟</span>
+            <strong>Window</strong>
+            <small>Enjoy the view</small>
+          </button>
+
+
+          <button
+            class="preference-chip"
+            data-preference="Quiet"
+          >
+            <span>😴</span>
+            <strong>Quiet</strong>
+            <small>Peaceful journey</small>
+          </button>
+
+
+          <button
+            class="preference-chip"
+            data-preference="Extra Legroom"
+          >
+            <span>🦵</span>
+            <strong>Extra legroom</strong>
+            <small>More space</small>
+          </button>
+
+
+          <button
+            class="preference-chip"
+            data-preference="Near Exit"
+          >
+            <span>🚪</span>
+            <strong>Near exit</strong>
+            <small>Easy access</small>
+          </button>
+
+
+          <button
+            class="preference-chip"
+            data-preference="Sit Together"
+          >
+            <span>👥</span>
+            <strong>Sit together</strong>
+            <small>Keep your group close</small>
+          </button>
+
+
+          <button
+            class="preference-chip"
+            data-preference="Budget"
+          >
+            <span>💰</span>
+            <strong>Budget-friendly</strong>
+            <small>Keep it affordable</small>
+          </button>
+
+        </div>
+
+
+        <button
+          class="find-seat-button"
+          id="findSeatButton"
+        >
+          Find my experience
+          <span>→</span>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SMART MATCH
+         ===================================================== -->
+
+    <section class="smart-section">
+
+      <div class="smart-container">
+
+
+        <div class="smart-visual">
+
+          <div class="smart-card">
+
+            <div class="smart-card-top">
+
+              <span>
+                ✦ TRIPSYNC MATCH
+              </span>
+
+              <span class="match-percent">
+                96%
+              </span>
+
+            </div>
+
+
+            <div class="smart-seat-area">
+
+              <div class="seat-column">
+
+                <div class="smart-seat">
+                  11A
+                </div>
+
+                <div class="smart-seat selected">
+                  12A
+                </div>
+
+                <div class="smart-seat">
+                  13A
+                </div>
+
+              </div>
+
+
+              <div class="seat-middle">
+
+                <div class="smart-seat">
+                  11B
+                </div>
+
+                <div class="smart-seat">
+                  12B
+                </div>
+
+                <div class="smart-seat">
+                  13B
+                </div>
+
+              </div>
+
+
+              <div class="seat-middle">
+
+                <div class="smart-seat">
+                  11C
+                </div>
+
+                <div class="smart-seat">
+                  12C
+                </div>
+
+                <div class="smart-seat">
+                  13C
+                </div>
+
+              </div>
+
+
+              <div class="seat-column">
+
+                <div class="smart-seat">
+                  11D
+                </div>
+
+                <div class="smart-seat">
+                  12D
+                </div>
+
+                <div class="smart-seat">
+                  13D
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="smart-result">
+
+              <div>
+
+                <small>BEST MATCH</small>
+
+                <h3>
+                  Seat 12A
+                </h3>
+
+                <p>
+                  Window • Extra legroom
+                </p>
+
+              </div>
+
+              <div class="match-icon">
+                ✓
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="smart-content">
+
+          <span class="eyebrow">
+            SMART SEAT MATCHING
+          </span>
 
           <h2>
-            Your seat should match your journey.
+            A seat chosen
+            <span>around you.</span>
           </h2>
 
           <p>
-            TripSync looks at your preferences and available seats
-            to recommend an option that fits you best.
+            TripSync considers your preferences,
+            available seats and travel conditions to
+            recommend an option that fits your journey.
           </p>
 
-          <div class="preference-list">
 
-            <button class="preference-chip selected">
-              🪟 Window
-            </button>
+          <div class="smart-steps">
 
-            <button class="preference-chip">
-              😴 Quiet
-            </button>
+            <div class="smart-step">
 
-            <button class="preference-chip">
-              🚪 Near Exit
-            </button>
+              <div>
+                01
+              </div>
 
-            <button class="preference-chip">
-              🦵 Extra Legroom
-            </button>
+              <section>
+                <h4>
+                  Tell us what you prefer
+                </h4>
 
-            <button class="preference-chip">
-              👥 Sit Together
-            </button>
+                <p>
+                  Window, quiet, legroom,
+                  group seating and more.
+                </p>
+              </section>
 
-            <button class="preference-chip">
-              💰 Budget
-            </button>
-
-            <button class="preference-chip">
-              ⭐ Premium
-            </button>
-
-          </div>
-
-        </div>
-
-        <div class="recommendation-card">
-
-          <div class="recommendation-top">
-
-            <strong>TripSync AI</strong>
-
-            <span class="match-badge">
-              96% MATCH
-            </span>
-
-          </div>
-
-          <h3>✨ Best Match — Seat 12A</h3>
-
-          <p>
-            Selected based on your travel preferences.
-          </p>
-
-          <div class="seat-preview">
-
-            <div class="seat">11A</div>
-            <div class="seat">11B</div>
-            <div class="seat">11C</div>
-            <div class="seat">11D</div>
-
-            <div class="seat selected">12A</div>
-            <div class="seat">12B</div>
-            <div class="seat">12C</div>
-            <div class="seat">12D</div>
-
-            <div class="seat">13A</div>
-            <div class="seat">13B</div>
-            <div class="seat">13C</div>
-            <div class="seat">13D</div>
-
-          </div>
-
-          <div class="recommendation-details">
-
-            <div class="detail">
-              <small>POSITION</small>
-              <strong>Window</strong>
             </div>
 
-            <div class="detail">
-              <small>SPACE</small>
-              <strong>Extra Legroom</strong>
+
+            <div class="smart-step">
+
+              <div>
+                02
+              </div>
+
+              <section>
+                <h4>
+                  We match available seats
+                </h4>
+
+                <p>
+                  Your preferences meet real
+                  seat availability.
+                </p>
+              </section>
+
             </div>
 
-            <div class="detail">
-              <small>PRICE</small>
-              <strong>₹899</strong>
+
+            <div class="smart-step">
+
+              <div>
+                03
+              </div>
+
+              <section>
+                <h4>
+                  You choose the final seat
+                </h4>
+
+                <p>
+                  TripSync recommends.
+                  You decide.
+                </p>
+              </section>
+
             </div>
 
           </div>
@@ -289,221 +747,126 @@ app.innerHTML = `
 
     </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="steps-section" id="how-it-works">
 
-      <div class="section-heading">
+    <!-- =====================================================
+         GROUP TRAVEL
+         ===================================================== -->
 
-        <div class="eyebrow">SIMPLE BY DESIGN</div>
-
-        <h2>
-          How TripSync works.
-        </h2>
-
-        <p>
-          From search to boarding, everything stays connected.
-        </p>
-
-      </div>
-
-      <div class="steps">
-
-        <div class="step">
-          <div class="step-number">01</div>
-          <h3>Search</h3>
-          <p>
-            Enter your destination and travel date.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">02</div>
-          <h3>Choose</h3>
-          <p>
-            Tell TripSync what kind of experience you prefer.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">03</div>
-          <h3>Book</h3>
-          <p>
-            Select your recommended seat and confirm your trip.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">04</div>
-          <h3>Travel</h3>
-          <p>
-            Your ticket stays safely inside My Tickets.
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- GROUP TRAVEL -->
     <section class="group-section">
 
       <div class="group-container">
 
         <div class="group-content">
 
-          <div class="eyebrow">
+          <span class="eyebrow">
             TRAVEL TOGETHER
-          </div>
+          </span>
 
           <h2>
-            Four people.
-            One smart seating plan.
+            Your group.
+            <span>One smart plan.</span>
           </h2>
 
           <p>
-            Travelling with friends or family shouldn't mean fighting
-            over seats. TripSync can consider everyone's preferences
-            and find a practical arrangement together.
+            Four people don't have to mean four
+            separate seat choices.
           </p>
 
-          <div class="group-features">
+          <p>
+            TripSync can consider everyone's preferences
+            and find a practical seating arrangement
+            while keeping your group together.
+          </p>
 
-            <div class="group-feature">
-              <span>✓</span>
-              Group seating optimization
-            </div>
+          <div class="group-list">
 
-            <div class="group-feature">
+            <div>
               <span>✓</span>
               Individual preferences
             </div>
 
-            <div class="group-feature">
+            <div>
               <span>✓</span>
-              Available-seat matching
+              Group seating optimization
             </div>
 
-            <div class="group-feature">
+            <div>
               <span>✓</span>
-              One booking for everyone
+              Real seat availability
             </div>
 
           </div>
 
         </div>
+
 
         <div class="group-visual">
 
-          <div class="group-visual-header">
-            <strong>Recommended arrangement</strong>
-            <span>4 passengers</span>
-          </div>
+          <div class="group-header">
 
-          <div class="group-seats">
+            <div>
+              <small>PASSENGERS</small>
+              <strong>4 travelers</strong>
+            </div>
 
-            <div class="group-seat">9A</div>
-            <div class="group-seat">9B</div>
-            <div class="group-seat">9C</div>
-            <div class="group-seat">9D</div>
-
-            <div class="group-seat recommended">10A</div>
-            <div class="group-seat friend">10B</div>
-            <div class="group-seat friend">10C</div>
-            <div class="group-seat recommended">10D</div>
-
-            <div class="group-seat">11A</div>
-            <div class="group-seat">11B</div>
-            <div class="group-seat">11C</div>
-            <div class="group-seat">11D</div>
-
-            <div class="group-seat">12A</div>
-            <div class="group-seat">12B</div>
-            <div class="group-seat">12C</div>
-            <div class="group-seat">12D</div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- BOOKING PREVIEW -->
-    <section class="booking-section">
-
-      <div class="section-heading">
-
-        <div class="eyebrow">YOUR JOURNEY</div>
-
-        <h2>
-          Everything in one place.
-        </h2>
-
-        <p>
-          Once your booking is confirmed, your journey stays organized.
-        </p>
-
-      </div>
-
-      <div class="booking-container">
-
-        <div class="booking-card">
-
-          <div class="booking-header">
-
-            <h3>Upcoming Journey</h3>
-
-            <span class="booking-status">
-              ✓ CONFIRMED
+            <span>
+              ✦ OPTIMIZED
             </span>
 
           </div>
 
-          <div class="booking-body">
 
-            <div class="route">
+          <div class="group-map">
 
-              <div class="location">
-                <h4>Bengaluru</h4>
-                <p>BLR • 08:30 AM</p>
-              </div>
+            <div class="group-row">
 
-              <div class="route-line">
-                <span>✈</span>
-                <small>2h 45m</small>
-              </div>
-
-              <div class="location right">
-                <h4>Goa</h4>
-                <p>GOI • 11:15 AM</p>
-              </div>
+              <span>9A</span>
+              <span>9B</span>
+              <span>9C</span>
+              <span>9D</span>
 
             </div>
 
-            <div class="booking-meta">
 
-              <div class="meta-item">
-                <small>DATE</small>
-                <strong>18 Oct 2026</strong>
-              </div>
+            <div class="group-row recommended">
 
-              <div class="meta-item">
-                <small>SEAT</small>
-                <strong>12A • Window</strong>
-              </div>
-
-              <div class="meta-item">
-                <small>PASSENGERS</small>
-                <strong>1 Passenger</strong>
-              </div>
-
-              <div class="meta-item">
-                <small>BOOKING ID</small>
-                <strong>TS-2048</strong>
-              </div>
+              <span>10A</span>
+              <span>10B</span>
+              <span>10C</span>
+              <span>10D</span>
 
             </div>
+
+
+            <div class="group-row">
+
+              <span>11A</span>
+              <span>11B</span>
+              <span>11C</span>
+              <span>11D</span>
+
+            </div>
+
+
+            <div class="group-row">
+
+              <span>12A</span>
+              <span>12B</span>
+              <span>12C</span>
+              <span>12D</span>
+
+            </div>
+
+          </div>
+
+
+          <div class="group-result">
+
+            <span>BEST GROUP ARRANGEMENT</span>
+
+            <strong>
+              10A • 10B • 10C • 10D
+            </strong>
 
           </div>
 
@@ -513,22 +876,145 @@ app.innerHTML = `
 
     </section>
 
-    <!-- CTA -->
-    <section class="cta-section">
 
-      <div class="cta-box">
+    <!-- =====================================================
+         HOW IT WORKS
+         ===================================================== -->
+
+    <section class="how-section" id="how-it-works">
+
+      <div class="section-heading">
+
+        <span class="eyebrow">
+          THE JOURNEY
+        </span>
 
         <h2>
-          Your next adventure starts here.
+          From “I want to travel”
+          to “I'm going.”
+        </h2>
+
+      </div>
+
+
+      <div class="how-grid">
+
+        <div class="how-card">
+
+          <span class="how-number">
+            01
+          </span>
+
+          <div class="how-icon">
+            🗺️
+          </div>
+
+          <h3>
+            Discover
+          </h3>
+
+          <p>
+            Find a destination and explore
+            the journeys that can take you there.
+          </p>
+
+        </div>
+
+
+        <div class="how-card">
+
+          <span class="how-number">
+            02
+          </span>
+
+          <div class="how-icon">
+            ✨
+          </div>
+
+          <h3>
+            Personalize
+          </h3>
+
+          <p>
+            Choose the experience you want
+            instead of settling for a random seat.
+          </p>
+
+        </div>
+
+
+        <div class="how-card">
+
+          <span class="how-number">
+            03
+          </span>
+
+          <div class="how-icon">
+            🎟️
+          </div>
+
+          <h3>
+            Reserve
+          </h3>
+
+          <p>
+            Confirm your passengers, seat and
+            journey in one connected flow.
+          </p>
+
+        </div>
+
+
+        <div class="how-card">
+
+          <span class="how-number">
+            04
+          </span>
+
+          <div class="how-icon">
+            🌍
+          </div>
+
+          <h3>
+            Go
+          </h3>
+
+          <p>
+            Your ticket lives in My Tickets.
+            Your next adventure begins.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FINAL CTA
+         ===================================================== -->
+
+    <section class="final-section">
+
+      <div class="final-card">
+
+        <span class="eyebrow">
+          YOUR NEXT ADVENTURE
+        </span>
+
+        <h2>
+          Somewhere out there
+          is waiting for you.
         </h2>
 
         <p>
-          Search smarter. Choose better. Travel together.
-          Welcome to TripSync.
+          Search it. Choose it. Sync it.
         </p>
 
-        <a href="#search" class="btn btn-light">
-          Plan My Journey →
+        <a href="#plan" class="btn btn-primary">
+          I want to travel
+          <span>→</span>
         </a>
 
       </div>
@@ -537,58 +1023,105 @@ app.innerHTML = `
 
   </main>
 
-  <!-- FOOTER -->
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
   <footer>
 
-    <div class="footer-container">
+    <div class="footer-main">
 
       <div class="footer-brand">
 
-        <a href="#" class="logo">
+        <a href="#home" class="logo">
           <div class="logo-icon">✦</div>
           Trip<span>Sync</span>
         </a>
 
         <p>
-          A smarter way to plan, book and experience your journey.
+          Smart travel, built around
+          the way you want to experience it.
         </p>
 
       </div>
 
-      <div class="footer-column">
-        <h4>TRAVEL</h4>
-        <a href="#">Bus</a>
-        <a href="#">Train</a>
-        <a href="#">Flight</a>
-        <a href="#">Explore</a>
-      </div>
 
       <div class="footer-column">
+
+        <h4>EXPLORE</h4>
+
+        <a href="#discover">
+          Destinations
+        </a>
+
+        <a href="#plan">
+          Bus
+        </a>
+
+        <a href="#plan">
+          Train
+        </a>
+
+        <a href="#plan">
+          Flight
+        </a>
+
+      </div>
+
+
+      <div class="footer-column">
+
         <h4>TRIPSYNC</h4>
-        <a href="#">About</a>
-        <a href="#">How It Works</a>
-        <a href="#">My Tickets</a>
-        <a href="#">Support</a>
+
+        <a href="#experience">
+          Your Experience
+        </a>
+
+        <a href="#how-it-works">
+          How It Works
+        </a>
+
+        <a href="#">
+          My Tickets
+        </a>
+
+        <a href="#">
+          Support
+        </a>
+
       </div>
 
+
       <div class="footer-column">
+
         <h4>ACCOUNT</h4>
-        <a href="#">Login</a>
-        <a href="#">Sign Up</a>
-        <a href="#">Bookings</a>
-        <a href="#">Profile</a>
+
+        <a href="#">
+          Log in
+        </a>
+
+        <a href="#">
+          Create account
+        </a>
+
+        <a href="#">
+          Profile
+        </a>
+
       </div>
 
     </div>
 
+
     <div class="footer-bottom">
 
       <span>
-        © 2026 TripSync. Built for better journeys.
+        © 2026 TripSync
       </span>
 
       <span>
-        Java • Spring Boot • MySQL
+        Built with Java • Spring Boot • MySQL
       </span>
 
     </div>
@@ -598,159 +1131,321 @@ app.innerHTML = `
 
 
 // =========================================================
-// INTERACTIONS
+// TRAVEL MODE SELECTION
 // =========================================================
 
-const preferenceChips = document.querySelectorAll(".preference-chip");
+const travelModes =
+  document.querySelectorAll(".travel-mode");
 
-preferenceChips.forEach((chip) => {
-  chip.addEventListener("click", () => {
-    chip.classList.toggle("selected");
-  });
-});
+let selectedMode = "Bus";
 
+travelModes.forEach((mode) => {
 
-// Transport tabs
+  mode.addEventListener("click", () => {
 
-const transportTabs = document.querySelectorAll(".search-tab");
-
-transportTabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-
-    transportTabs.forEach((item) => {
+    travelModes.forEach((item) => {
       item.classList.remove("active");
     });
 
-    tab.classList.add("active");
-  });
-});
+    mode.classList.add("active");
 
-
-// Smooth scrolling
-
-document.querySelectorAll('a[href^="#"]').forEach((link) => {
-
-  link.addEventListener("click", (event) => {
-
-    const targetId = link.getAttribute("href");
-
-    if (targetId === "#") {
-      return;
-    }
-
-    const target = document.querySelector(targetId);
-
-    if (target) {
-      event.preventDefault();
-
-      target.scrollIntoView({
-        behavior: "smooth"
-      });
-    }
+    selectedMode = mode.dataset.mode;
 
   });
 
 });
+
+
 // =========================================================
-// SEARCH FUNCTIONALITY
+// SWAP FROM / TO
 // =========================================================
 
-const searchButton = document.querySelector(".search-button");
+const swapButton =
+  document.querySelector("#swapJourney");
 
-if (searchButton) {
-  searchButton.addEventListener("click", () => {
-    const activeTab = document.querySelector(".search-tab.active");
+if (swapButton) {
 
-    const fromInput = document.querySelector(
-      '.field input[placeholder="Departure city"]'
-    );
+  swapButton.addEventListener("click", () => {
 
-    const toInput = document.querySelector(
-      '.field input[placeholder="Destination city"]'
-    );
+    const from =
+      document.querySelector("#fromCity");
 
-    const dateInput = document.querySelector('.field input[type="date"]');
+    const to =
+      document.querySelector("#toCity");
 
-    const passengerSelect = document.querySelector(".field select");
+    const temporary = from.value;
 
-    const from = fromInput?.value.trim();
-    const to = toInput?.value.trim();
-    const date = dateInput?.value;
-    const passengers = passengerSelect?.value;
+    from.value = to.value;
+    to.value = temporary;
 
-    const transport = activeTab
-      ? activeTab.textContent.replace(/[🚌🚆✈️]/g, "").trim()
-      : "Bus";
+  });
 
-    // Validation
+}
+
+
+// =========================================================
+// JOURNEY SEARCH
+// =========================================================
+
+const journeySearch =
+  document.querySelector("#journeySearch");
+
+if (journeySearch) {
+
+  journeySearch.addEventListener("click", () => {
+
+    const from =
+      document.querySelector("#fromCity").value.trim();
+
+    const to =
+      document.querySelector("#toCity").value.trim();
+
+    const date =
+      document.querySelector("#travelDate").value;
+
+    const travelers =
+      document.querySelector("#travelerCount").value;
+
+
     if (!from || !to || !date) {
-      alert("Please enter your departure, destination and travel date.");
+
+      alert(
+        "Please enter your departure, destination and travel date."
+      );
+
       return;
+
     }
 
-    if (from.toLowerCase() === to.toLowerCase()) {
-      alert("Departure and destination cannot be the same.");
+
+    if (
+      from.toLowerCase() ===
+      to.toLowerCase()
+    ) {
+
+      alert(
+        "Departure and destination cannot be the same."
+      );
+
       return;
+
     }
 
-    // Save search temporarily
-    const searchData = {
-      transport,
+
+    const journey = {
+      mode: selectedMode,
       from,
       to,
       date,
-      passengers
+      travelers
     };
 
+
     sessionStorage.setItem(
-      "tripSyncSearch",
-      JSON.stringify(searchData)
+      "tripSyncJourney",
+      JSON.stringify(journey)
     );
 
-    console.log("TripSync Search:", searchData);
 
-    // Show confirmation
     alert(
-      `Searching ${transport} journeys\\n\\n` +
-      `${from} → ${to}\\n` +
-      `Date: ${date}\\n` +
-      `${passengers}`
+      `TripSync is ready to search! ✨\n\n` +
+      `${selectedMode}: ${from} → ${to}\n` +
+      `Date: ${date}\n` +
+      `Travelers: ${travelers}`
     );
+
   });
+
 }
 
 
 // =========================================================
-// LOGIN / SIGN UP BUTTONS
+// EXPERIENCE PREFERENCES
 // =========================================================
 
-const loginButton = document.querySelector(".nav-btn:not(.primary)");
-const signupButton = document.querySelector(".nav-btn.primary");
+const preferenceChips =
+  document.querySelectorAll(".preference-chip");
 
-if (loginButton) {
-  loginButton.addEventListener("click", () => {
-    alert("TripSync Login — coming next!");
-  });
+const preferenceCount =
+  document.querySelector(".preference-count");
+
+
+function updatePreferenceCount() {
+
+  const selected =
+    document.querySelectorAll(
+      ".preference-chip.selected"
+    );
+
+  if (preferenceCount) {
+
+    preferenceCount.textContent =
+      `${selected.length} selected`;
+
+  }
+
 }
 
-if (signupButton) {
-  signupButton.addEventListener("click", () => {
-    alert("TripSync Sign Up — coming next!");
-  });
-}
-
-
-// =========================================================
-// PREFERENCE SELECTION
-// =========================================================
-
-const selectedPreferences = () => {
-  return [...document.querySelectorAll(".preference-chip.selected")]
-    .map((chip) => chip.textContent.trim());
-};
 
 preferenceChips.forEach((chip) => {
+
   chip.addEventListener("click", () => {
-    console.log("Selected preferences:", selectedPreferences());
+
+    chip.classList.toggle("selected");
+
+    updatePreferenceCount();
+
   });
+
 });
+
+
+// =========================================================
+// FIND MY EXPERIENCE
+// =========================================================
+
+const findSeatButton =
+  document.querySelector("#findSeatButton");
+
+if (findSeatButton) {
+
+  findSeatButton.addEventListener("click", () => {
+
+    const selected =
+      [...document.querySelectorAll(
+        ".preference-chip.selected"
+      )].map(
+        (chip) =>
+          chip.dataset.preference
+      );
+
+
+    if (selected.length === 0) {
+
+      alert(
+        "Choose at least one preference first."
+      );
+
+      return;
+
+    }
+
+
+    sessionStorage.setItem(
+      "tripSyncPreferences",
+      JSON.stringify(selected)
+    );
+
+
+    alert(
+      `Perfect! ✨\n\n` +
+      `TripSync will look for:\n` +
+      selected.map(
+        (item) => `• ${item}`
+      ).join("\n")
+    );
+
+  });
+
+}
+
+
+// =========================================================
+// LOGIN / SIGN UP
+// =========================================================
+
+const loginBtn =
+  document.querySelector("#loginBtn");
+
+const signupBtn =
+  document.querySelector("#signupBtn");
+
+
+if (loginBtn) {
+
+  loginBtn.addEventListener("click", () => {
+
+    alert(
+      "TripSync Login will be connected to the backend next. 🔐"
+    );
+
+  });
+
+}
+
+
+if (signupBtn) {
+
+  signupBtn.addEventListener("click", () => {
+
+    alert(
+      "TripSync account creation will be connected next. ✨"
+    );
+
+  });
+
+}
+
+
+// =========================================================
+// SMOOTH SCROLLING
+// =========================================================
+
+document
+  .querySelectorAll('a[href^="#"]')
+  .forEach((link) => {
+
+    link.addEventListener("click", (event) => {
+
+      const targetId =
+        link.getAttribute("href");
+
+      if (targetId === "#") {
+        return;
+      }
+
+      const target =
+        document.querySelector(targetId);
+
+      if (target) {
+
+        event.preventDefault();
+
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }
+
+    });
+
+  });
+
+
+// =========================================================
+// CURRENT DATE — PREVENT PAST TRAVEL DATES
+// =========================================================
+
+const travelDate =
+  document.querySelector("#travelDate");
+
+if (travelDate) {
+
+  const today =
+    new Date().toISOString().split("T")[0];
+
+  travelDate.min = today;
+
+}
+
+
+// =========================================================
+// INITIALIZE
+// =========================================================
+
+updatePreferenceCount();
+
+console.log(
+  "✦ TripSync — Smart travel starts here."
+);
