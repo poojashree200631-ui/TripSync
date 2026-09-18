@@ -1,11 +1,11 @@
 /* =========================================================
    TRIPSYNC
-   Luxury Travel Design System
+   Luxury Travel Booking Platform
    ========================================================= */
 
 
 /* =========================================================
-   GLOBAL RESET
+   RESET
    ========================================================= */
 
 * {
@@ -14,10 +14,13 @@
   box-sizing: border-box;
 }
 
+
 html {
   width: 100%;
+
   scroll-behavior: smooth;
 }
+
 
 body {
   width: 100%;
@@ -49,6 +52,7 @@ body {
 
   width: 100%;
   height: 100vh;
+
   min-height: 650px;
 
   overflow: hidden;
@@ -68,13 +72,13 @@ body {
   display: block;
 
   object-fit: cover;
+
   object-position: center center;
 
-  animation: heroReveal 1.2s ease-out both;
+  animation:
+    heroReveal 1.2s ease-out both;
 }
 
-
-/* subtle cinematic overlay */
 
 .hero-fade {
   position: absolute;
@@ -86,92 +90,22 @@ body {
   background:
     linear-gradient(
       to bottom,
-      rgba(8, 35, 37, 0.05),
-      transparent 45%,
-      rgba(8, 35, 37, 0.20)
+      rgba(8, 35, 37, 0.02),
+      transparent 48%,
+      rgba(8, 35, 37, 0.16)
     );
 }
 
 
 /* =========================================================
-   HERO SCROLL
+   JOURNEY SECTION
    ========================================================= */
 
-.hero-scroll {
-  position: absolute;
-
-  left: 42px;
-  bottom: 30px;
-
-  z-index: 10;
-
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 8px 0;
-
-  border: none;
-  outline: none;
-
-  background: transparent;
-
-  color: rgba(255, 255, 255, 0.92);
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  font-size: 8px;
-
-  font-weight: 600;
-
-  letter-spacing: 2.3px;
-
-  cursor: pointer;
-
-  text-shadow:
-    0 2px 12px rgba(0, 0, 0, 0.4);
-
-  animation:
-    scrollReveal 1s ease-out 0.8s both;
-
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-
-.hero-scroll:hover {
-  opacity: 0.7;
-
-  transform:
-    translateY(-3px);
-}
-
-
-.arrow {
-  font-size: 18px;
-
-  font-weight: 300;
-
-  line-height: 1;
-
-  animation:
-    arrowFloat 2s ease-in-out infinite;
-}
-
-
-/* =========================================================
-   EXPLORE SECTION
-   ========================================================= */
-
-.explore-section {
+.journey-section {
   position: relative;
 
   width: 100%;
+
   min-height: 100vh;
 
   padding:
@@ -183,33 +117,31 @@ body {
     linear-gradient(
       180deg,
       #f3eee5 0%,
-      #f7f3ec 48%,
-      #eee7db 100%
+      #f8f4ed 50%,
+      #ece4d7 100%
     );
 
   overflow: hidden;
 }
 
 
-/* decorative background glow */
-
-.explore-section::before {
+.journey-section::before {
   content: "";
 
   position: absolute;
 
-  width: 500px;
-  height: 500px;
+  width: 650px;
+  height: 650px;
 
-  top: -250px;
-  right: -150px;
+  top: -320px;
+  right: -220px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(190, 153, 105, 0.12),
+      rgba(183, 143, 94, 0.14),
       transparent 68%
     );
 
@@ -217,25 +149,66 @@ body {
 }
 
 
+.journey-section::after {
+  content: "";
+
+  position: absolute;
+
+  width: 400px;
+  height: 400px;
+
+  left: -250px;
+  bottom: -250px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(41, 92, 91, 0.07),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
 /* =========================================================
-   SECTION HEADING
+   CONTAINER
    ========================================================= */
 
-.explore-heading {
+.journey-container {
   position: relative;
 
   z-index: 2;
 
-  max-width: 760px;
+  width: 100%;
 
-  margin-bottom: 75px;
+  max-width: 1250px;
+
+  margin: 0 auto;
 }
 
 
-.section-label {
-  display: inline-block;
+/* =========================================================
+   INTRO
+   ========================================================= */
 
-  margin-bottom: 20px;
+.journey-intro {
+  max-width: 720px;
+
+  margin-bottom: 65px;
+}
+
+
+.section-eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 21px;
 
   color: #a27a50;
 
@@ -247,26 +220,18 @@ body {
 }
 
 
-/* small line beside label */
-
-.section-label::before {
+.section-eyebrow::before {
   content: "";
-
-  display: inline-block;
 
   width: 32px;
   height: 1px;
-
-  margin-right: 12px;
-
-  vertical-align: middle;
 
   background: #a27a50;
 }
 
 
-.explore-heading h1 {
-  margin-bottom: 24px;
+.journey-intro h1 {
+  margin-bottom: 25px;
 
   color: #173638;
 
@@ -276,179 +241,624 @@ body {
     serif;
 
   font-size:
-    clamp(50px, 6vw, 84px);
+    clamp(55px, 6.5vw, 88px);
 
   font-weight: 400;
 
-  line-height: 0.98;
+  line-height: 0.96;
 
-  letter-spacing: -2.5px;
+  letter-spacing: -3px;
 }
 
 
-.explore-heading p {
-  max-width: 540px;
+.journey-intro p {
+  max-width: 530px;
 
-  color: #687575;
+  color: #6a7777;
 
   font-size: 16px;
-
-  font-weight: 400;
 
   line-height: 1.8;
 }
 
 
 /* =========================================================
-   TRAVEL OPTIONS
+   SEARCH CARD
    ========================================================= */
 
-.travel-options {
-  position: relative;
-
-  z-index: 2;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 20px;
-
-  width: 100%;
-}
-
-
-/* =========================================================
-   TRAVEL CARD
-   ========================================================= */
-
-.travel-card {
+.search-card {
   position: relative;
 
   width: 100%;
-  min-height: 350px;
 
-  padding: 34px;
+  overflow: hidden;
 
   border:
     1px solid
     rgba(23, 54, 56, 0.12);
 
-  border-radius: 4px;
-
   background:
-    rgba(255, 252, 246, 0.72);
-
-  color: #173638;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  overflow: hidden;
-
-  backdrop-filter: blur(6px);
-
-  transition:
-    transform 0.45s cubic-bezier(.2,.7,.2,1),
-    box-shadow 0.45s ease,
-    background 0.45s ease,
-    border-color 0.45s ease;
-}
-
-
-.travel-card::before {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  top: 0;
-
-  width: 100%;
-  height: 3px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #a27a50,
-      #d2b38a,
-      transparent
-    );
-
-  transform:
-    scaleX(0);
-
-  transform-origin: left;
-
-  transition:
-    transform 0.45s ease;
-}
-
-
-.travel-card:hover::before {
-  transform:
-    scaleX(1);
-}
-
-
-.travel-card:hover {
-  transform:
-    translateY(-10px);
-
-  background:
-    rgba(255, 255, 252, 0.95);
-
-  border-color:
-    rgba(23, 54, 56, 0.18);
+    rgba(255, 253, 248, 0.92);
 
   box-shadow:
-    0 30px 70px
-    rgba(23, 54, 56, 0.12);
+    0 30px 80px
+    rgba(23, 54, 56, 0.10);
+
+  backdrop-filter: blur(12px);
 }
 
 
 /* =========================================================
-   TRAVEL ICON
+   TRANSPORT TABS
    ========================================================= */
 
-.travel-icon {
-  width: 58px;
-  height: 58px;
+.transport-tabs {
+  display: flex;
+
+  width: 100%;
+
+  border-bottom:
+    1px solid
+    rgba(23, 54, 56, 0.10);
+}
+
+
+.transport-tab {
+  position: relative;
+
+  flex: 1;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 75px;
+  gap: 10px;
 
-  border:
-    1px solid
-    rgba(162, 122, 80, 0.25);
+  padding:
+    23px
+    20px;
 
-  border-radius: 50%;
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #7a8585;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: 1.4px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.3s ease,
+    background 0.3s ease;
+}
+
+
+.transport-tab:hover {
+  background:
+    rgba(162, 122, 80, 0.05);
+
+  color: #173638;
+}
+
+
+.transport-tab.active {
+  color: #173638;
 
   background:
-    rgba(162, 122, 80, 0.08);
+    rgba(162, 122, 80, 0.07);
+}
 
-  color: #8d6844;
 
-  font-size: 23px;
+.transport-tab.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 20%;
+  right: 20%;
+
+  bottom: -1px;
+
+  height: 2px;
+
+  background: #a27a50;
+}
+
+
+.tab-icon {
+  font-size: 17px;
+
+  line-height: 1;
 }
 
 
 /* =========================================================
-   TRAVEL NUMBER
+   ROUTE ROW
    ========================================================= */
 
-.travel-number {
+.route-row {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    60px
+    1fr;
+
+  align-items: center;
+
+  padding:
+    37px
+    38px
+    27px;
+
+  border-bottom:
+    1px solid
+    rgba(23, 54, 56, 0.08);
+}
+
+
+.location-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+.field-label {
+  color: #a27a50;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+}
+
+
+.location-field input {
+  width: 100%;
+
+  padding:
+    4px
+    0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #173638;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 26px;
+
+  font-weight: 400;
+}
+
+
+.location-field input::placeholder {
+  color: #a7aeac;
+
+  opacity: 1;
+}
+
+
+/* =========================================================
+   SWAP BUTTON
+   ========================================================= */
+
+.swap-button {
+  width: 43px;
+  height: 43px;
+
+  justify-self: center;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(162, 122, 80, 0.30);
+
+  border-radius: 50%;
+
+  background:
+    rgba(162, 122, 80, 0.07);
+
+  color: #8d6844;
+
+  font-size: 19px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease;
+}
+
+
+.swap-button:hover {
+  transform:
+    rotate(180deg);
+
+  background:
+    rgba(162, 122, 80, 0.14);
+}
+
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.details-row {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  padding:
+    26px
+    38px
+    30px;
+}
+
+
+.detail-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  padding-right: 35px;
+}
+
+
+.detail-field + .detail-field {
+  padding-left: 35px;
+
+  padding-right: 0;
+
+  border-left:
+    1px solid
+    rgba(23, 54, 56, 0.08);
+}
+
+
+.detail-field input,
+.detail-field select {
+  width: 100%;
+
+  padding:
+    4px
+    0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #173638;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   SEARCH BUTTON
+   ========================================================= */
+
+.search-button {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding:
+    24px
+    38px;
+
+  border: none;
+
+  outline: none;
+
+  background: #173638;
+
+  color: #f7f1e7;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    padding 0.3s ease;
+}
+
+
+.search-button:hover {
+  background: #244b4d;
+
+  padding-left: 44px;
+
+  padding-right: 44px;
+}
+
+
+.search-arrow {
+  font-size: 20px;
+
+  font-weight: 300;
+
+  letter-spacing: 0;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.search-button:hover .search-arrow {
+  transform:
+    translateX(7px);
+}
+
+
+/* =========================================================
+   RESULTS SECTION
+   ========================================================= */
+
+.results-section {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 80vh;
+
+  padding:
+    125px
+    8vw
+    150px;
+
+  background: #173638;
+
+  color: #f5efe5;
+
+  overflow: hidden;
+}
+
+
+.results-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 550px;
+  height: 550px;
+
+  right: -250px;
+  bottom: -300px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(208, 169, 120, 0.09),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+.results-container {
+  position: relative;
+
+  z-index: 2;
+
+  max-width: 1100px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   RESULTS HEADING
+   ========================================================= */
+
+.results-heading {
+  margin-bottom: 60px;
+}
+
+
+.results-heading .section-eyebrow {
+  color: #d0a978;
+}
+
+
+.results-heading .section-eyebrow::before {
+  background: #d0a978;
+}
+
+
+.results-heading h2 {
+  margin-bottom: 18px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(48px, 5.5vw, 72px);
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -2px;
+}
+
+
+.results-heading p {
+  color:
+    rgba(245, 239, 229, 0.62);
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.results-empty {
+  max-width: 650px;
+
+  padding:
+    55px
+    0;
+
+  border-top:
+    1px solid
+    rgba(245, 239, 229, 0.15);
+
+  border-bottom:
+    1px solid
+    rgba(245, 239, 229, 0.15);
+}
+
+
+.empty-symbol {
+  margin-bottom: 20px;
+
+  color: #d0a978;
+
+  font-size: 24px;
+}
+
+
+.results-empty h3 {
+  margin-bottom: 12px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 30px;
+
+  font-weight: 400;
+}
+
+
+.results-empty p {
+  max-width: 480px;
+
+  color:
+    rgba(245, 239, 229, 0.57);
+
+  font-size: 13px;
+
+  line-height: 1.8;
+}
+
+
+.results-empty.show-error {
+  border-color:
+    rgba(208, 169, 120, 0.5);
+}
+
+
+/* =========================================================
+   RESULT CARD
+   ========================================================= */
+
+.trip-results {
+  width: 100%;
+}
+
+
+.demo-result-card {
+  width: 100%;
+
+  padding: 38px;
+
+  border:
+    1px solid
+    rgba(245, 239, 229, 0.15);
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+.demo-result-card:hover {
+  background:
+    rgba(255, 255, 255, 0.07);
+
+  transform:
+    translateY(-3px);
+}
+
+
+.demo-result-top {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+
+.result-type {
   display: block;
 
-  margin-bottom: 9px;
+  margin-bottom: 14px;
 
-  color: #a27a50;
+  color: #d0a978;
 
   font-size: 9px;
 
@@ -458,69 +868,169 @@ body {
 }
 
 
-/* =========================================================
-   TRAVEL TITLE
-   ========================================================= */
+.demo-result-top h3 {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-.travel-content h2 {
-  margin-bottom: 12px;
+  font-size: 33px;
 
-  color: #173638;
+  font-weight: 400;
+}
+
+
+.demo-result-top h3 span {
+  margin:
+    0 12px;
+
+  color: #d0a978;
+}
+
+
+.result-price {
+  color:
+    rgba(245, 239, 229, 0.52);
+
+  font-size: 11px;
+
+  text-align: right;
+}
+
+
+.result-price strong {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #f5efe5;
 
   font-family:
     Georgia,
     "Times New Roman",
     serif;
 
-  font-size: 38px;
+  font-size: 27px;
 
   font-weight: 400;
-
-  letter-spacing: -0.8px;
 }
 
 
 /* =========================================================
-   TRAVEL DESCRIPTION
+   RESULT DIVIDER
    ========================================================= */
 
-.travel-content p {
-  max-width: 210px;
+.result-divider {
+  width: 100%;
 
-  color: #6d7979;
+  height: 1px;
 
-  font-size: 13px;
+  margin:
+    35px
+    0;
 
-  line-height: 1.7;
+  background:
+    rgba(245, 239, 229, 0.12);
 }
 
 
 /* =========================================================
-   CARD ARROW
+   RESULT INFORMATION
    ========================================================= */
 
-.travel-arrow {
-  position: absolute;
+.result-info {
+  display: grid;
 
-  right: 32px;
-  bottom: 29px;
+  grid-template-columns:
+    1fr
+    1fr
+    1fr
+    auto;
 
-  color: #173638;
+  align-items: center;
 
-  font-family:
-    Georgia,
-    serif;
+  gap: 30px;
+}
 
-  font-size: 25px;
+
+.result-info div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.result-info div span {
+  color:
+    rgba(245, 239, 229, 0.42);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+
+.result-info div strong {
+  color: #f5efe5;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   CHOOSE EXPERIENCE
+   ========================================================= */
+
+.choose-trip {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  padding:
+    15px
+    20px;
+
+  border:
+    1px solid
+    rgba(208, 169, 120, 0.45);
+
+  background: transparent;
+
+  color: #e1c49d;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.8px;
+
+  cursor: pointer;
 
   transition:
-    transform 0.35s ease;
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 
-.travel-card:hover .travel-arrow {
-  transform:
-    translateX(8px);
+.choose-trip:hover {
+  background: #d0a978;
+
+  color: #173638;
+}
+
+
+.choose-trip span:last-child {
+  font-size: 17px;
+
+  letter-spacing: 0;
 }
 
 
@@ -543,47 +1053,7 @@ body {
     transform:
       scale(1);
   }
-}
 
-
-/* =========================================================
-   SCROLL ANIMATION
-   ========================================================= */
-
-@keyframes scrollReveal {
-
-  from {
-    opacity: 0;
-
-    transform:
-      translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-
-    transform:
-      translateY(0);
-  }
-}
-
-
-/* =========================================================
-   ARROW ANIMATION
-   ========================================================= */
-
-@keyframes arrowFloat {
-
-  0%,
-  100% {
-    transform:
-      translateY(0);
-  }
-
-  50% {
-    transform:
-      translateY(4px);
-  }
 }
 
 
@@ -591,25 +1061,44 @@ body {
    TABLET
    ========================================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
 
-  .explore-section {
+  .journey-section {
     padding:
-      110px 6vw 120px;
+      105px
+      6vw
+      120px;
   }
 
-  .travel-options {
+
+  .route-row {
     grid-template-columns:
+      1fr
+      50px
       1fr;
+
+    padding-left: 25px;
+    padding-right: 25px;
   }
 
-  .travel-card {
-    min-height: 280px;
+
+  .details-row {
+    padding-left: 25px;
+    padding-right: 25px;
   }
 
-  .travel-icon {
-    margin-bottom: 50px;
+
+  .search-button {
+    padding-left: 25px;
+    padding-right: 25px;
   }
+
+
+  .result-info {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
 }
 
 
@@ -625,55 +1114,708 @@ body {
     min-height: 0;
   }
 
+
   .hero-image {
     object-position:
       58% center;
   }
 
-  .hero-scroll {
-    left: 20px;
 
-    bottom: 20px;
-
-    font-size: 7px;
-
-    letter-spacing: 1.7px;
-  }
-
-  .arrow {
-    font-size: 16px;
-  }
-
-  .explore-section {
+  .journey-section {
     padding:
-      85px 24px 100px;
+      85px
+      22px
+      100px;
   }
 
-  .explore-heading {
+
+  .journey-intro {
     margin-bottom: 50px;
   }
 
-  .explore-heading h1 {
-    font-size: 49px;
 
-    letter-spacing: -1.5px;
+  .journey-intro h1 {
+    font-size: 53px;
+
+    letter-spacing: -2px;
   }
 
-  .explore-heading p {
+
+  .journey-intro p {
+    font-size: 14px;
+  }
+
+
+  .transport-tab {
+    padding:
+      18px
+      8px;
+
+    font-size: 10px;
+
+    letter-spacing: 0.5px;
+  }
+
+
+  .tab-icon {
     font-size: 15px;
   }
 
-  .travel-card {
-    min-height: 285px;
 
-    padding: 28px;
+  .route-row {
+    grid-template-columns:
+      1fr;
+
+    gap: 20px;
+
+    padding:
+      28px
+      22px;
   }
 
-  .travel-icon {
+
+  .swap-button {
+    justify-self: flex-start;
+
+    transform:
+      rotate(90deg);
+  }
+
+
+  .swap-button:hover {
+    transform:
+      rotate(270deg);
+  }
+
+
+  .location-field input {
+    font-size: 23px;
+  }
+
+
+  .details-row {
+    grid-template-columns:
+      1fr;
+
+    gap: 25px;
+
+    padding:
+      25px
+      22px
+      28px;
+  }
+
+
+  .detail-field {
+    padding-right: 0;
+  }
+
+
+  .detail-field + .detail-field {
+    padding-left: 0;
+
+    padding-top: 25px;
+
+    border-left: none;
+
+    border-top:
+      1px solid
+      rgba(23, 54, 56, 0.08);
+  }
+
+
+  .search-button {
+    padding:
+      21px
+      22px;
+  }
+
+
+  .results-section {
+    padding:
+      85px
+      22px
+      110px;
+  }
+
+
+  .demo-result-card {
+    padding:
+      25px;
+  }
+
+
+  .demo-result-top {
+    flex-direction: column;
+
+    gap: 25px;
+  }
+
+
+  .result-price {
+    text-align: left;
+  }
+
+
+  .result-info {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .choose-trip {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+}
+/* =========================================================
+   CHOOSE YOUR EXPERIENCE
+   ========================================================= */
+
+.experience-section {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 100vh;
+
+  padding:
+    130px
+    8vw
+    150px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f8f4ed 0%,
+      #eee5d8 100%
+    );
+
+  color: #173638;
+
+  overflow: hidden;
+}
+
+
+.experience-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 600px;
+  height: 600px;
+
+  top: -280px;
+  left: -250px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(162, 122, 80, 0.12),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+
+.experience-container {
+  position: relative;
+
+  z-index: 2;
+
+  max-width: 1100px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   EXPERIENCE HEADER
+   ========================================================= */
+
+.experience-header {
+  max-width: 700px;
+
+  margin-bottom: 65px;
+}
+
+
+.experience-header h2 {
+  margin-bottom: 22px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(52px, 6vw, 78px);
+
+  font-weight: 400;
+
+  line-height: 0.98;
+
+  letter-spacing: -2.5px;
+}
+
+
+.experience-header p {
+  max-width: 520px;
+
+  color: #687575;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   EXPERIENCE OPTIONS
+   ========================================================= */
+
+.experience-options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 12px;
+
+  margin-bottom: 35px;
+}
+
+
+.experience-option {
+  display: grid;
+
+  grid-template-columns:
+    50px
+    1fr
+    25px;
+
+  align-items: center;
+
+  gap: 15px;
+
+  width: 100%;
+
+  min-height: 92px;
+
+  padding:
+    18px
+    22px;
+
+  border:
+    1px solid
+    rgba(23, 54, 56, 0.12);
+
+  background:
+    rgba(255, 253, 248, 0.75);
+
+  color: #173638;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.experience-option:hover {
+  transform:
+    translateY(-3px);
+
+  background:
+    #fffdf8;
+
+  border-color:
+    rgba(162, 122, 80, 0.35);
+
+  box-shadow:
+    0 12px 30px
+    rgba(23, 54, 56, 0.08);
+}
+
+
+.experience-option.selected {
+  background:
+    #173638;
+
+  border-color:
+    #173638;
+
+  color: #f5efe5;
+
+  box-shadow:
+    0 15px 35px
+    rgba(23, 54, 56, 0.16);
+}
+
+
+/* =========================================================
+   PREFERENCE ICON
+   ========================================================= */
+
+.preference-icon {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(162, 122, 80, 0.30);
+
+  border-radius: 50%;
+
+  background:
+    rgba(162, 122, 80, 0.07);
+
+  color: #9a7249;
+
+  font-size: 18px;
+}
+
+
+.experience-option.selected
+.preference-icon {
+  background:
+    rgba(208, 169, 120, 0.14);
+
+  color: #d9b887;
+
+  border-color:
+    rgba(208, 169, 120, 0.40);
+}
+
+
+/* =========================================================
+   PREFERENCE TEXT
+   ========================================================= */
+
+.experience-option strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 19px;
+
+  font-weight: 400;
+}
+
+
+.experience-option small {
+  color: #7b8585;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+
+.experience-option.selected small {
+  color:
+    rgba(245, 239, 229, 0.60);
+}
+
+
+/* =========================================================
+   CHECK
+   ========================================================= */
+
+.preference-check {
+  opacity: 0;
+
+  color: #d0a978;
+
+  font-size: 17px;
+
+  transform:
+    scale(0.6);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.experience-option.selected
+.preference-check {
+  opacity: 1;
+
+  transform:
+    scale(1);
+}
+
+
+/* =========================================================
+   FIND MY SEAT
+   ========================================================= */
+
+.find-seat-button {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding:
+    24px
+    28px;
+
+  border: none;
+
+  background: #173638;
+
+  color: #f7f1e7;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    padding 0.3s ease;
+}
+
+
+.find-seat-button:hover {
+  background: #244b4d;
+
+  padding-left: 34px;
+
+  padding-right: 34px;
+}
+
+
+.find-seat-button span:last-child {
+  font-size: 20px;
+
+  font-weight: 300;
+
+  letter-spacing: 0;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.find-seat-button:hover
+span:last-child {
+  transform:
+    translateX(7px);
+}
+
+
+/* =========================================================
+   SMART MATCH
+   ========================================================= */
+
+.smart-match {
+  display: none;
+
+  margin-top: 45px;
+
+  padding:
+    38px;
+
+  border:
+    1px solid
+    rgba(208, 169, 120, 0.40);
+
+  background:
+    #173638;
+
+  color: #f5efe5;
+
+  animation:
+    matchReveal 0.6s ease both;
+}
+
+
+.smart-match.visible {
+  display: block;
+}
+
+
+.match-label {
+  display: block;
+
+  margin-bottom: 18px;
+
+  color: #d0a978;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+}
+
+
+.smart-match h3 {
+  margin-bottom: 10px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 42px;
+
+  font-weight: 400;
+}
+
+
+.smart-match p {
+  margin-bottom: 25px;
+
+  color:
+    rgba(245, 239, 229, 0.65);
+
+  font-size: 13px;
+}
+
+
+.match-score {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding-top: 15px;
+
+  border-top:
+    1px solid
+    rgba(245, 239, 229, 0.14);
+
+  color:
+    rgba(245, 239, 229, 0.55);
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+
+.match-score strong {
+  color: #d0a978;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 25px;
+
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   MATCH ANIMATION
+   ========================================================= */
+
+@keyframes matchReveal {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   EXPERIENCE MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .experience-section {
+    padding:
+      85px
+      22px
+      110px;
+  }
+
+
+  .experience-header {
     margin-bottom: 45px;
   }
 
-  .travel-content h2 {
-    font-size: 34px;
+
+  .experience-header h2 {
+    font-size: 51px;
+
+    letter-spacing: -1.8px;
   }
+
+
+  .experience-options {
+    grid-template-columns:
+      1fr;
+
+    gap: 10px;
+  }
+
+
+  .experience-option {
+    min-height: 85px;
+
+    padding:
+      15px
+      17px;
+  }
+
+
+  .experience-option strong {
+    font-size: 18px;
+  }
+
+
+  .smart-match {
+    padding:
+      28px;
+  }
+
+
+  .smart-match h3 {
+    font-size: 36px;
+  }
+
 }
