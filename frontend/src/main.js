@@ -740,7 +740,47 @@ app.innerHTML = `
           </div>
 
         </div>
+        <!-- PASSENGER DETAILS -->
 
+<div class="passenger-details-section" id="passengerDetails">
+
+  <div class="passenger-details-header">
+    <span class="section-eyebrow">TRAVEL INFORMATION</span>
+    <h2>Passenger Details</h2>
+    <p>Enter the details of everyone travelling.</p>
+  </div>
+
+  <div id="passengerForms"></div>
+
+  <button
+    class="continue-booking-button"
+    id="continueBooking"
+    type="button"
+  >
+    CONTINUE TO BOOKING SUMMARY →
+  </button>
+
+</div>
+
+<!-- BOOKING SUMMARY -->
+
+<div class="booking-summary-section" id="bookingSummary">
+
+  <h2>Booking Summary</h2>
+
+  <div id="summaryJourney"></div>
+
+  <div id="summarySeats"></div>
+
+  <div id="summaryPassengers"></div>
+
+  <div id="summaryTotal"></div>
+
+  <button id="finalConfirmBooking">
+    CONFIRM BOOKING
+  </button>
+
+</div>
 
         <!-- =================================================
              CONFIRMATION
@@ -868,7 +908,7 @@ document
 
 document
   .querySelector("#searchTrips")
-  .addEventListener("click", () => {
+  .addEventListener("click", async () => {
 
     const from =
       document
@@ -2199,12 +2239,51 @@ function calculateGroupScore(
    RENDER SEAT SELECTION
    ========================================================= */
 
-function renderSeatSelection() {
+async function renderSeatSelection() {
 
   currentSeats =
     getSeats();
 
+// Check seats already booked in the database
 
+try {
+  const response = await fetch(
+    "http://localhost:8080/api/bookings"
+  );
+
+  if (!response.ok) {
+    throw new Error("Could not load bookings.");
+  }
+
+  const bookings = await response.json();
+
+  const bookedSeats = bookings.filter(
+    (booking) =>
+      booking.fromLocation?.toLowerCase() ===
+        searchedJourney.from?.toLowerCase() &&
+      booking.toLocation?.toLowerCase() ===
+        searchedJourney.to?.toLowerCase() &&
+      booking.transport?.toLowerCase() ===
+        selectedTransport.toLowerCase() &&
+      booking.travelDate === searchedJourney.date &&
+      booking.status === "Confirmed"
+  );
+
+  currentSeats.forEach((seat) => {
+    if (
+      bookedSeats.some(
+        (booking) => booking.seatNumber === seat.id
+      )
+    ) {
+      seat.available = false;
+    }
+  });
+
+} catch (error) {
+  alert("Could not check booked seats. Please try again.");
+  console.error(error);
+  return;
+}
   selectedSeats = [];
 
   bestGroupSeats = [];
@@ -2283,10 +2362,7 @@ function renderSeatSelection() {
     Update vehicle information.
   */
 
-  const data =
-    transportData[
-      selectedTransport
-    ];
+const data = transportData[selectedTransport];
 
 
   document.querySelector(
@@ -2387,6 +2463,55 @@ function renderSeatSelection() {
 
   attachSeatListeners();
 
+}
+
+// =================================================
+// PASSENGER DETAILS
+// =================================================
+
+function renderPassengerForms() {
+  const passengerForms = document.getElementById("passengerForms");
+
+  if (!passengerForms) return;
+
+  const passengerCount =
+    Number(document.getElementById("passengers")?.value || 1);
+
+  passengerForms.innerHTML = "";
+
+  for (let i = 1; i <= passengerCount; i++) {
+    passengerForms.innerHTML += `
+      <div class="passenger-card">
+        <h3>Passenger ${i}</h3>
+
+        <label>Full Name</label>
+        <input
+          type="text"
+          name="passengerName${i}"
+          placeholder="Enter full name"
+          required
+        />
+
+        <label>Age</label>
+        <input
+          type="number"
+          name="passengerAge${i}"
+          placeholder="Enter age"
+          min="1"
+          max="120"
+          required
+        />
+
+        <label>Gender</label>
+        <select name="passengerGender${i}" required>
+          <option value="">Select gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    `;
+  }
 }
 
 
@@ -3527,65 +3652,27 @@ document
     () => {
 
       if (
-        selectedSeats.length === 0
-      ) {
-
-        alert(
-          "Please select at least one seat first."
-        );
-
-        return;
-
-      }
-
-
-      const passengerCount =
-        searchedJourney.passengers ||
-        1;
-
-
-      if (
         selectedSeats.length !==
-        passengerCount
+        (searchedJourney.passengers || 1)
       ) {
 
         alert(
-          `Please select exactly ${passengerCount} seat${passengerCount === 1 ? "" : "s"}.`
+          `Please select exactly ${
+            searchedJourney.passengers || 1
+          } seat(s).`
         );
 
         return;
-
       }
 
-
-      const seatNames =
-        selectedSeats
-          .map(
-            (seat) =>
-              seat.id
-          )
-          .join(", ");
-
-
-      document.querySelector(
-        "#confirmationText"
-      ).textContent =
-        `${transportData[selectedTransport].name} seat${selectedSeats.length > 1 ? "s" : ""} ${seatNames} selected for ${searchedJourney.from || "your departure"} → ${searchedJourney.to || "your destination"}.`;
-
+      renderPassengerForms();
 
       document
-        .querySelector(
-          "#bookingConfirmation"
-        )
-        .classList.add(
-          "visible"
-        );
-
+        .querySelector("#passengerDetails")
+        .classList.add("visible");
 
       document
-        .querySelector(
-          "#bookingConfirmation"
-        )
+        .querySelector("#passengerDetails")
         .scrollIntoView({
           behavior: "smooth",
           block: "center"
@@ -3605,19 +3692,18 @@ document
     "click",
     () => {
 
-      document
-        .querySelector(
-          "#bookingConfirmation"
-        )
-        .classList.remove(
-          "visible"
-        );
+      selectedSeats = [];
 
+      updateSelectedDisplay();
+
+      rerenderSeatMapOnly();
 
       document
-        .querySelector(
-          "#seatSelection"
-        )
+        .querySelector("#bookingConfirmation")
+        .classList.remove("visible");
+
+      document
+        .querySelector("#seatSelection")
         .scrollIntoView({
           behavior: "smooth"
         });
@@ -3677,7 +3763,172 @@ function escapeHTML(
 
 }
 
+// CONTINUE TO BOOKING SUMMARY
 
+document
+  .querySelector("#continueBooking")
+  .addEventListener("click", () => {
+
+    const passengerCards =
+      document.querySelectorAll(".passenger-card");
+
+    const passengerDetails = [];
+
+    for (const card of passengerCards) {
+
+      const name =
+        card.querySelector('input[type="text"]').value.trim();
+
+      const age =
+        card.querySelector('input[type="number"]').value;
+
+      const gender =
+        card.querySelector("select").value;
+
+      if (!name || !age || !gender) {
+        alert("Please fill all passenger details.");
+        return;
+      }
+
+      passengerDetails.push({
+        name,
+        age,
+        gender
+      });
+    }
+
+    document
+  .querySelector("#bookingSummary")
+  .classList.add("visible");
+
+document
+  .querySelector("#summaryJourney")
+  .textContent =
+  `${searchedJourney.from} → ${searchedJourney.to}`;
+
+document
+  .querySelector("#summarySeats")
+  .textContent =
+  `Selected Seats: ${selectedSeats.map(seat => seat.id).join(", ")}`;
+
+document
+  .querySelector("#summaryPassengers")
+  .textContent =
+  `Passengers: ${passengerDetails.map(p => p.name).join(", ")}`;
+
+document
+  .querySelector("#summaryTotal")
+  .textContent =
+  `Total: ₹${transportData[selectedTransport].price * selectedSeats.length}`;
+
+document
+  .querySelector("#bookingSummary")
+  .scrollIntoView({
+    behavior: "smooth"
+  });
+  });
+
+/* =================================================
+   FINAL BOOKING CONFIRMATION
+   ================================================= */
+
+document
+  .querySelector("#finalConfirmBooking")
+  .addEventListener("click", async () => {
+
+    const passengerCards =
+      document.querySelectorAll(".passenger-card");
+
+    const savedBookings = [];
+
+    try {
+      for (let i = 0; i < passengerCards.length; i++) {
+
+        const card = passengerCards[i];
+
+        const passengerName =
+          card.querySelector('input[type="text"]').value.trim();
+
+        const passengerAge =
+          Number(card.querySelector('input[type="number"]').value);
+
+        const passengerGender =
+          card.querySelector("select").value;
+
+        if (!passengerName || !passengerAge || !passengerGender) {
+          throw new Error("Please fill all passenger details.");
+        }
+
+        const response = await fetch("http://localhost:8080/api/bookings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            passengerName,
+            passengerAge,
+            passengerGender,
+            fromLocation: searchedJourney.from,
+            toLocation: searchedJourney.to,
+            transport: selectedTransport,
+            seatNumber: selectedSeats[i].id,
+            travelDate: searchedJourney.date,
+            totalAmount: transportData[selectedTransport].price
+          })
+        });
+
+        if (!response.ok) {
+  const errorMessage = await response.text();
+
+  throw new Error(
+    errorMessage || "Booking could not be saved."
+  );
+}
+
+        const responseData = await response.json();
+        savedBookings.push(responseData);
+      }
+
+      const bookingIds = savedBookings
+        .map(booking => booking.id)
+        .join(", ");
+
+      alert(`Booking confirmed successfully! Booking ID(s): ${bookingIds} 🎉`);
+      const loadBookingsButton =
+  document.querySelector("#loadBookings");
+
+if (loadBookingsButton) {
+  loadBookingsButton.click();
+}
+
+      document.querySelector("#bookingSummary").classList.remove("visible");
+      document.querySelector("#passengerDetails").classList.remove("visible");
+      document.querySelector("#bookingConfirmation").classList.add("visible");
+
+      const travelQuotes = [
+  "The world is waiting for you. Enjoy your journey! 🌍",
+  "Collect memories, not things. Happy travelling! ✈️",
+  "Every journey begins with a single step. Have a safe trip! ❤️",
+  "Adventure is out there. Enjoy every moment! 🌟",
+  "Travel far, explore more, and create beautiful memories! 🧳"
+];
+
+const randomQuote =
+  travelQuotes[Math.floor(Math.random() * travelQuotes.length)];
+
+document.querySelector("#confirmationText").textContent =
+  `Your booking has been confirmed successfully! Booking ID(s): ${bookingIds}\n\n${randomQuote}`;
+
+      document.querySelector("#bookingConfirmation").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    } catch (error) {
+      alert(error.message || "Error saving booking. Please try again.");
+      console.error(error);
+    }
+  });
 /* =========================================================
    INITIAL STATE
    ========================================================= */
@@ -3693,3 +3944,224 @@ document.querySelector(
 ).classList.remove(
   "visible"
 );
+
+/* =========================================================
+   MY BOOKINGS
+   ========================================================= */
+
+const myBookingsSection = document.createElement("section");
+
+myBookingsSection.id = "myBookings";
+myBookingsSection.innerHTML = `
+  <div class="my-bookings-container">
+    <h2>My Bookings</h2>
+    <p>Your saved travel bookings</p>
+
+    <button id="loadBookings" type="button">
+      View My Bookings
+    </button>
+
+    <div class="bookings-table-wrapper">
+      <table class="bookings-table">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Passenger</th>
+            <th>Transport</th>
+            <th>Route</th>
+            <th>Seat</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="bookingsTableBody">
+          <tr>
+            <td colspan="8">Click View My Bookings</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+`;
+
+document.querySelector("#app").appendChild(myBookingsSection);
+
+document.querySelector("#loadBookings").addEventListener("click", async () => {
+  const tableBody = document.querySelector("#bookingsTableBody");
+
+  tableBody.innerHTML = `
+    <tr><td colspan="6">Loading bookings...</td></tr>
+  `;
+
+  try {
+    const response = await fetch("http://localhost:8080/api/bookings");
+
+    if (!response.ok) {
+      throw new Error("Unable to load bookings.");
+    }
+
+    const bookings = await response.json();
+
+    if (bookings.length === 0) {
+      tableBody.innerHTML = `
+        <tr><td colspan="6">No bookings found.</td></tr>
+      `;
+      return;
+    }
+
+    tableBody.innerHTML = bookings.map(booking => `
+      <tr>
+        <td>${escapeHTML(booking.id)}</td>
+        <td>${escapeHTML(booking.passengerName)}</td>
+        <td>${escapeHTML(booking.transport)}</td>
+        <td>${escapeHTML(booking.fromLocation)} → ${escapeHTML(booking.toLocation)}</td>
+        <td>${escapeHTML(booking.seatNumber)}</td>
+        <td>₹${escapeHTML(booking.totalAmount)}</td>
+        <td>${escapeHTML(booking.status || "Confirmed")}</td>
+        <td>
+        <button
+  class="cancel-booking"
+  data-id="${escapeHTML(booking.id)}"
+  ${String(booking.status || "Confirmed").toLowerCase() === "cancelled" ? "disabled" : ""}
+>
+  ${String(booking.status || "Confirmed").toLowerCase() === "cancelled" ? "Cancelled" : "Cancel"}
+</button>
+</td>
+      </tr>
+    `).join("");
+    tableBody.querySelectorAll(".cancel-booking").forEach(button => {
+      button.addEventListener("click", async () => {
+        const bookingId = button.dataset.id;
+
+        if (!confirm(`Are you sure you want to cancel booking ${bookingId}?`)) {
+          return;
+        }
+
+        try {
+          const cancelResponse = await fetch(
+            `http://localhost:8080/api/bookings/${bookingId}/cancel`,
+            { method: "PUT" }
+          );
+
+          if (!cancelResponse.ok) {
+            throw new Error("Unable to cancel booking.");
+          }
+
+          alert("Booking cancelled successfully!");
+
+          document.querySelector("#loadBookings").click();
+
+        } catch (error) {
+          alert(error.message);
+        }
+      });
+    });
+
+  } catch (error) {
+    tableBody.innerHTML = `
+      <tr><td colspan="7">${escapeHTML(error.message)}</td></tr>
+    `;
+  }
+});
+
+/* =========================================================
+   MY TRIPS - TRIP SYNCHRONIZATION
+   ========================================================= */
+
+const myTripsSection = document.createElement("section");
+
+myTripsSection.id = "myTrips";
+
+myTripsSection.innerHTML = `
+  <div class="my-bookings-container">
+    <h2>My Trips</h2>
+    <p>Your synchronized travel itinerary</p>
+
+    <button id="loadMyTrips" type="button">
+      View My Trips
+    </button>
+
+    <div id="myTripsContent">
+      <p>Click View My Trips to see your travel itinerary.</p>
+    </div>
+  </div>
+`;
+
+document.querySelector("#app").appendChild(myTripsSection);
+
+document.querySelector("#loadMyTrips").addEventListener("click", async () => {
+  const tripsContent = document.querySelector("#myTripsContent");
+
+  tripsContent.innerHTML = "<p>Loading your trips...</p>";
+
+  try {
+    const response = await fetch("http://localhost:8080/api/trips");
+
+    if (!response.ok) {
+      throw new Error("Unable to load your trips.");
+    }
+
+    const trips = await response.json();
+
+    const confirmedTrips = trips
+      .map(trip => ({
+        ...trip,
+        bookings: (trip.bookings || []).filter(
+          booking =>
+            String(booking.status || "Confirmed").toLowerCase() === "confirmed"
+        )
+      }))
+      .filter(trip => trip.bookings.length > 0);
+
+    if (confirmedTrips.length === 0) {
+      tripsContent.innerHTML = "<p>No confirmed trips found.</p>";
+      return;
+    }
+
+    tripsContent.innerHTML = confirmedTrips.map((trip, index) => `
+      <div class="trip-card">
+        <h3>Trip ${index + 1}</h3>
+
+        <p><strong>Trip ID:</strong> ${escapeHTML(trip.id)}</p>
+
+        <p><strong>Route:</strong>
+          ${escapeHTML(trip.fromLocation)} →
+          ${escapeHTML(trip.toLocation)}
+        </p>
+
+        <p><strong>Travel Date:</strong>
+          ${escapeHTML(trip.travelDate)}
+        </p>
+
+        <p><strong>Transport:</strong>
+          ${escapeHTML(trip.transport)}
+        </p>
+
+        <p><strong>Passengers:</strong> ${trip.bookings.length}</p>
+
+        <h4>Passenger Details</h4>
+        <ul>
+          ${trip.bookings.map(booking => `
+            <li>
+              ${escapeHTML(booking.passengerName)}
+              - Seat ${escapeHTML(booking.seatNumber)}
+              - Booking ID ${escapeHTML(booking.id)}
+            </li>
+          `).join("")}
+        </ul>
+
+        <p><strong>Total Amount:</strong>
+          ₹${trip.bookings.reduce(
+            (sum, booking) => sum + Number(booking.totalAmount || 0), 0
+          )}
+        </p>
+
+        <p><strong>Status:</strong> Synchronized</p>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    tripsContent.innerHTML = `<p>${escapeHTML(error.message)}</p>`;
+  }
+});

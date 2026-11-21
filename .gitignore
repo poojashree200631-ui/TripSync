@@ -1,0 +1,25 @@
+# Dependencies and build files
+node_modules/
+dist/
+dist-ssr/
+**/target/
+**/build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Editor files
+.vscode/
+.idea/
+.DS_Store

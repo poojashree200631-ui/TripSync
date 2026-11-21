@@ -2558,3 +2558,142 @@ a {
   }
 
 }
+/* PASSENGER DETAILS */
+
+.passenger-details-section {
+  display: none;
+  margin-top: 30px;
+  padding: 25px;
+  border-radius: 15px;
+  background: #ffffff;
+}
+
+.passenger-details-section.visible {
+  display: block;
+}
+
+.passenger-card {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+}
+
+.passenger-card h3 {
+  margin-bottom: 15px;
+}
+
+.passenger-card label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.passenger-card input,
+.passenger-card select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.continue-booking-button {
+  padding: 14px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* =========================================================
+   MY BOOKINGS
+   ========================================================= */
+
+#myBookings {
+  padding: 80px 6%;
+  background: #f3eee5;
+}
+
+.my-bookings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 35px;
+  border-radius: 20px;
+  background: #fffdf9;
+  box-shadow: 0 15px 40px rgba(23, 54, 56, 0.08);
+}
+
+.my-bookings-container h2 {
+  margin-bottom: 10px;
+  color: #173638;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: 400;
+}
+
+.my-bookings-container p {
+  margin-bottom: 25px;
+  color: #788282;
+  font-size: 13px;
+}
+
+#loadBookings {
+  padding: 14px 24px;
+  margin-bottom: 25px;
+  border: none;
+  border-radius: 9px;
+  background: #173638;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#loadBookings:hover {
+  background: #a27a50;
+}
+
+.bookings-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #173638;
+  font-size: 12px;
+}
+
+.bookings-table th {
+  padding: 16px 12px;
+  background: #173638;
+  color: white;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.bookings-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #e8e2d8;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.bookings-table tbody tr:hover {
+  background: #f7f3ec;
+}
+
+@media (max-width: 650px) {
+  #myBookings {
+    padding: 45px 15px;
+  }
+
+  .my-bookings-container {
+    padding: 20px;
+  }
+
+  .my-bookings-container h2 {
+    font-size: 32px;
+  }
+}
