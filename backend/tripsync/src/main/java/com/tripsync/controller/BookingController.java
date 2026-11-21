@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -25,6 +28,35 @@ public class BookingController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> createBooking(@RequestBody Booking booking) {
+        if (booking.getPassengerAge() <= 0 || booking.getPassengerAge() > 120) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Please enter a valid passenger age between 1 and 120.");
+        }
+        
+        try {
+            LocalDate travelDate;
+
+            try {
+                travelDate = LocalDate.parse(booking.getTravelDate());
+            } catch (DateTimeParseException e) {
+                travelDate = LocalDate.parse(
+                        booking.getTravelDate(),
+                        DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                );
+            }
+
+            if (travelDate.isBefore(LocalDate.now())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Past travel dates are not allowed. Please select a future date.");
+            }
+
+        } catch (DateTimeParseException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid travel date.");
+        }
 
         boolean alreadyBooked =
                 bookingRepository

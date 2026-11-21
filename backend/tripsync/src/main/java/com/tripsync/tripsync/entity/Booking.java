@@ -18,7 +18,7 @@ public class Booking {
     private String toLocation;
     private String transport;
     private String seatNumber;
-    private String travelDate;
+    private java.lang.String travelDate;
 
     private double totalAmount;
     private String status = "Confirmed";
