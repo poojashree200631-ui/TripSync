@@ -2244,37 +2244,26 @@ async function renderSeatSelection() {
   currentSeats =
     getSeats();
 
-// Check seats already booked in the database
+// Check occupied seats directly from the database API
 
 try {
-  const response = await fetch(
-    "http://localhost:8080/api/bookings"
-  );
+  const url =
+    `http://localhost:8080/api/bookings/occupied-seats` +
+    `?fromLocation=${encodeURIComponent(searchedJourney.from)}` +
+    `&toLocation=${encodeURIComponent(searchedJourney.to)}` +
+    `&transport=${encodeURIComponent(selectedTransport)}` +
+    `&travelDate=${encodeURIComponent(searchedJourney.date)}`;
+
+  const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error("Could not load bookings.");
+    throw new Error("Could not load occupied seats.");
   }
 
-  const bookings = await response.json();
-
-  const bookedSeats = bookings.filter(
-    (booking) =>
-      booking.fromLocation?.toLowerCase() ===
-        searchedJourney.from?.toLowerCase() &&
-      booking.toLocation?.toLowerCase() ===
-        searchedJourney.to?.toLowerCase() &&
-      booking.transport?.toLowerCase() ===
-        selectedTransport.toLowerCase() &&
-      booking.travelDate === searchedJourney.date &&
-      booking.status === "Confirmed"
-  );
+  const bookedSeats = await response.json();
 
   currentSeats.forEach((seat) => {
-    if (
-      bookedSeats.some(
-        (booking) => booking.seatNumber === seat.id
-      )
-    ) {
+    if (bookedSeats.includes(seat.id)) {
       seat.available = false;
     }
   });

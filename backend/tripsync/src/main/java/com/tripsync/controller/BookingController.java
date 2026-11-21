@@ -109,6 +109,26 @@ public class BookingController {
         return bookingRepository.findAll();
     }
 
+    @GetMapping("/occupied-seats")
+public java.util.List<String> getOccupiedSeats(
+        @RequestParam String fromLocation,
+        @RequestParam String toLocation,
+        @RequestParam String transport,
+        @RequestParam String travelDate
+) {
+    return bookingRepository
+            .findByFromLocationAndToLocationAndTransportAndTravelDateAndStatus(
+                    fromLocation,
+                    toLocation,
+                    transport,
+                    travelDate,
+                    "Confirmed"
+            )
+            .stream()
+            .map(Booking::getSeatNumber)
+            .collect(java.util.stream.Collectors.toList());
+}
+
     @PutMapping("/{id}/cancel")
     public String cancelBooking(@PathVariable Long id) {
 

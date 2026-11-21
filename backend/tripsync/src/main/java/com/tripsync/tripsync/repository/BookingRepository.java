@@ -15,4 +15,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             String seatNumber,
             String status
     );
+
+    java.util.List<Booking> findByFromLocationAndToLocationAndTransportAndTravelDateAndStatus(
+        String fromLocation,
+        String toLocation,
+        String transport,
+        String travelDate,
+        String status
+);
 }
