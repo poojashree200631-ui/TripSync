@@ -23,4 +23,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
         String travelDate,
         String status
 );
+
+    boolean existsByFromLocationAndToLocationAndTransportAndTravelDateAndSeatNumberAndStatusAndIdNot(
+        String fromLocation,
+        String toLocation,
+        String transport,
+        String travelDate,
+        String seatNumber,
+        String status,
+        Long id
+);
 }

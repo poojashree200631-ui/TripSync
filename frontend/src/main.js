@@ -61,6 +61,10 @@ let bestGroupSeats = [];
 
 let selectedSeats = [];
 
+let changingBookingId = null;
+
+let lastBookingId = null;
+
 let searchedJourney = {
   from: "",
   to: "",
@@ -2261,6 +2265,17 @@ try {
   }
 
   const bookedSeats = await response.json();
+  if (changingBookingId !== null) {
+  const ownBooking = window.currentChangingBooking;
+
+  if (ownBooking) {
+    const ownSeatIndex = bookedSeats.indexOf(ownBooking.seatNumber);
+
+    if (ownSeatIndex !== -1) {
+      bookedSeats.splice(ownSeatIndex, 1);
+    }
+  }
+}
 
   currentSeats.forEach((seat) => {
     if (bookedSeats.includes(seat.id)) {
@@ -3636,40 +3651,74 @@ document
 
 document
   .querySelector("#confirmSeat")
-  .addEventListener(
-    "click",
-    () => {
+  .addEventListener("click", () => {
 
-      if (
-        selectedSeats.length !==
-        (searchedJourney.passengers || 1)
-      ) {
+    if (
+      selectedSeats.length !==
+      (searchedJourney.passengers || 1)
+    ) {
+      alert(
+        `Please select exactly ${
+          searchedJourney.passengers || 1
+        } seat(s).`
+      );
+      return;
+    }
 
-        alert(
-          `Please select exactly ${
-            searchedJourney.passengers || 1
-          } seat(s).`
-        );
+    // If changing an existing booking
+    if (changingBookingId !== null) {
 
+      const booking = window.currentChangingBooking;
+
+      if (!booking) {
+        alert("Booking details not found.");
         return;
       }
 
-      renderPassengerForms();
-
       document
         .querySelector("#passengerDetails")
+        .classList.remove("visible");
+
+      document
+        .querySelector("#bookingSummary")
         .classList.add("visible");
 
+      document.querySelector("#summaryJourney").textContent =
+        `${searchedJourney.from} → ${searchedJourney.to}`;
+
+      document.querySelector("#summarySeats").textContent =
+        `Selected Seats: ${selectedSeats.map(seat => seat.id).join(", ")}`;
+
+      document.querySelector("#summaryPassengers").textContent =
+        `Passenger: ${booking.passengerName}`;
+
+      document.querySelector("#summaryTotal").textContent =
+        `Total: ₹${booking.totalAmount}`;
+
       document
-        .querySelector("#passengerDetails")
+        .querySelector("#bookingSummary")
         .scrollIntoView({
-          behavior: "smooth",
-          block: "center"
+          behavior: "smooth"
         });
 
+      return;
     }
-  );
 
+    // Normal new booking
+    renderPassengerForms();
+
+    document
+      .querySelector("#passengerDetails")
+      .classList.add("visible");
+
+    document
+      .querySelector("#passengerDetails")
+      .scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+  });
 
 /* =========================================================
    CHANGE SEAT
@@ -3680,6 +3729,8 @@ document
   .addEventListener(
     "click",
     () => {
+      
+      changingBookingId = lastBookingId;
 
       selectedSeats = [];
 
@@ -3831,53 +3882,85 @@ document
     const savedBookings = [];
 
     try {
-      for (let i = 0; i < passengerCards.length; i++) {
+      if (changingBookingId !== null) {
 
-        const card = passengerCards[i];
+  if (selectedSeats.length !== 1) {
+    throw new Error("Please select exactly one seat.");
+  }
 
-        const passengerName =
-          card.querySelector('input[type="text"]').value.trim();
-
-        const passengerAge =
-          Number(card.querySelector('input[type="number"]').value);
-
-        const passengerGender =
-          card.querySelector("select").value;
-
-        if (!passengerName || !passengerAge || !passengerGender) {
-          throw new Error("Please fill all passenger details.");
-        }
-
-        const response = await fetch("http://localhost:8080/api/bookings", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            passengerName,
-            passengerAge,
-            passengerGender,
-            fromLocation: searchedJourney.from,
-            toLocation: searchedJourney.to,
-            transport: selectedTransport,
-            seatNumber: selectedSeats[i].id,
-            travelDate: searchedJourney.date,
-            totalAmount: transportData[selectedTransport].price
-          })
-        });
-
-        if (!response.ok) {
-  const errorMessage = await response.text();
-
-  throw new Error(
-    errorMessage || "Booking could not be saved."
+  const response = await fetch(
+    `http://localhost:8080/api/bookings/${changingBookingId}/seat`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        seatNumber: selectedSeats[0].id
+      })
+    }
   );
+
+  if (!response.ok) {
+    const errorMessage = await response.text();
+    throw new Error(errorMessage || "Unable to change seat.");
+  }
+
+  const updatedBooking = await response.json();
+
+  savedBookings.push(updatedBooking);
+
+  changingBookingId = null;
+
+} else {
+
+  for (let i = 0; i < passengerCards.length; i++) {
+
+    const card = passengerCards[i];
+
+    const passengerName =
+      card.querySelector('input[type="text"]').value.trim();
+
+    const passengerAge =
+      Number(card.querySelector('input[type="number"]').value);
+
+    const passengerGender =
+      card.querySelector("select").value;
+
+    if (!passengerName || !passengerAge || !passengerGender) {
+      throw new Error("Please fill all passenger details.");
+    }
+
+    const response = await fetch("http://localhost:8080/api/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        passengerName,
+        passengerAge,
+        passengerGender,
+        fromLocation: searchedJourney.from,
+        toLocation: searchedJourney.to,
+        transport: selectedTransport,
+        seatNumber: selectedSeats[i].id,
+        travelDate: searchedJourney.date,
+        totalAmount: transportData[selectedTransport].price
+      })
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Booking could not be saved.");
+    }
+
+    const responseData = await response.json();
+    savedBookings.push(responseData);
+  }
 }
-
-        const responseData = await response.json();
-        savedBookings.push(responseData);
-      }
-
+      
+      lastBookingId = savedBookings[0].id;
+      changingBookingId = null;
       const bookingIds = savedBookings
         .map(booking => booking.id)
         .join(", ");
@@ -4008,17 +4091,64 @@ document.querySelector("#loadBookings").addEventListener("click", async () => {
         <td>${escapeHTML(booking.seatNumber)}</td>
         <td>₹${escapeHTML(booking.totalAmount)}</td>
         <td>${escapeHTML(booking.status || "Confirmed")}</td>
-        <td>
-        <button
-  class="cancel-booking"
-  data-id="${escapeHTML(booking.id)}"
-  ${String(booking.status || "Confirmed").toLowerCase() === "cancelled" ? "disabled" : ""}
->
-  ${String(booking.status || "Confirmed").toLowerCase() === "cancelled" ? "Cancelled" : "Cancel"}
-</button>
+       <td>
+  <button
+    class="change-seat"
+    data-id="${escapeHTML(booking.id)}"
+    ${String(booking.status || "Confirmed").toLowerCase() === "cancelled" ? "disabled" : ""}
+  >
+    Change Seat
+  </button>
+
+  <button
+    class="cancel-booking"
+    data-id="${escapeHTML(booking.id)}"
+    ${String(booking.status || "Confirmed").toLowerCase() === "cancelled" ? "disabled" : ""}
+  >
+    ${String(booking.status || "Confirmed").toLowerCase() === "cancelled" ? "Cancelled" : "Cancel"}
+  </button>
 </td>
       </tr>
     `).join("");
+    tableBody.querySelectorAll(".change-seat").forEach(button => {
+  button.addEventListener("click", async () => {
+    const bookingId = button.dataset.id;
+
+    try {
+      const booking = bookings.find(
+  item => String(item.id) === String(bookingId)
+);
+
+if (!booking) {
+  throw new Error("Booking not found.");
+}
+
+      changingBookingId = booking.id;
+      window.currentChangingBooking = booking;
+
+      searchedJourney.from = booking.fromLocation;
+      searchedJourney.to = booking.toLocation;
+      searchedJourney.date = booking.travelDate;
+      searchedJourney.passengers = 1;
+
+      selectedTransport = booking.transport;
+
+      selectedSeats = [];
+
+      renderSeatSelection();
+
+      document.querySelector("#seatSelection").classList.add("visible");
+
+      document.querySelector("#seatSelection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+    } catch (error) {
+      alert(error.message);
+    }
+  });
+});
     tableBody.querySelectorAll(".cancel-booking").forEach(button => {
       button.addEventListener("click", async () => {
         const bookingId = button.dataset.id;

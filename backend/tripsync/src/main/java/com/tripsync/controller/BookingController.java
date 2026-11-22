@@ -129,6 +129,51 @@ public java.util.List<String> getOccupiedSeats(
             .collect(java.util.stream.Collectors.toList());
 }
 
+    @PutMapping("/{id}/seat")
+@Transactional
+public ResponseEntity<?> updateBookingSeat(
+        @PathVariable Long id,
+        @RequestBody java.util.Map<String, String> request) {
+
+    java.util.Optional<Booking> optionalBooking = bookingRepository.findById(id);
+
+    if (optionalBooking.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking not found.");
+    }
+
+    Booking booking = optionalBooking.get();
+
+    if (!"Confirmed".equalsIgnoreCase(booking.getStatus())) {
+        return ResponseEntity.badRequest().body("Only confirmed bookings can be changed.");
+    }
+
+    String newSeat = request.get("seatNumber");
+
+    if (newSeat == null || newSeat.isBlank()) {
+        return ResponseEntity.badRequest().body("Please select a seat.");
+    }
+
+    boolean alreadyBooked = bookingRepository
+            .existsByFromLocationAndToLocationAndTransportAndTravelDateAndSeatNumberAndStatusAndIdNot(
+                    booking.getFromLocation(),
+                    booking.getToLocation(),
+                    booking.getTransport(),
+                    booking.getTravelDate(),
+                    newSeat,
+                    "Confirmed",
+                    id
+            );
+
+    if (alreadyBooked) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("This seat is already booked for this journey.");
+    }
+
+    booking.setSeatNumber(newSeat);
+
+    return ResponseEntity.ok(bookingRepository.save(booking));
+}
+
     @PutMapping("/{id}/cancel")
     public String cancelBooking(@PathVariable Long id) {
 
