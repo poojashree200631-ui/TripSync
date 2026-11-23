@@ -2697,3 +2697,71 @@ a {
     font-size: 32px;
   }
 }
+
+/* =========================================================
+   PHASE 2 - HOTEL STAY DESIGN
+   ========================================================= */
+
+#hotelStay,
+#myHotelBookings {
+  padding: 30px 20px;
+  margin: 25px auto;
+  max-width: 1100px;
+}
+
+#hotelStay h2,
+#myHotelBookings h2 {
+  color: #243b64;
+  margin-bottom: 12px;
+}
+
+#hotelStay .trip-card,
+#myHotelBookings .trip-card {
+  background: #ffffff;
+  padding: 22px;
+  margin: 18px 0;
+  border-radius: 12px;
+  border: 1px solid #e1e7f0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+#hotelStay button,
+#myHotelBookings button {
+  background: #315bea;
+  color: white;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+#hotelStay button:hover,
+#myHotelBookings button:hover {
+  background: #203fbd;
+}
+
+#hotelStay input {
+  display: block;
+  width: 100%;
+  max-width: 450px;
+  padding: 12px;
+  margin: 8px 0 16px;
+  border: 1px solid #ccd4e0;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+#hotelStay label {
+  display: block;
+  font-weight: 600;
+  color: #243b64;
+}
+
+#myHotelBookings .cancel-hotel-booking {
+  background: #dc3545;
+}
+
+#myHotelBookings .cancel-hotel-booking:hover {
+  background: #b02a37;
+}

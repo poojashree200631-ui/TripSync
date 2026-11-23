@@ -4284,3 +4284,281 @@ document.querySelector("#loadMyTrips").addEventListener("click", async () => {
     tripsContent.innerHTML = `<p>${escapeHTML(error.message)}</p>`;
   }
 });
+
+/* =========================================================
+   PHASE 2 - HOTEL STAY SECTION
+   ========================================================= */
+
+const hotelSection = document.createElement("section");
+
+hotelSection.id = "hotelStay";
+
+hotelSection.innerHTML = `
+  <div class="my-bookings-container">
+    <h2>Hotel Stay Reservations</h2>
+    <p>Find and reserve your stay with TripSync.</p>
+
+    <div id="hotelList">
+      <p>Loading hotels...</p>
+    </div>
+  </div>
+`;
+
+document.querySelector("#app").appendChild(hotelSection);
+// Load available hotels
+async function loadHotels() {
+  const hotelList = document.querySelector("#hotelList");
+
+  try {
+    const response = await fetch("http://localhost:8080/api/hotels");
+
+    if (!response.ok) {
+      throw new Error("Unable to load hotels.");
+    }
+
+    const hotels = await response.json();
+
+    if (hotels.length === 0) {
+      hotelList.innerHTML = "<p>No hotels available.</p>";
+      return;
+    }
+
+    hotelList.innerHTML = hotels.map(hotel => `
+      <div class="trip-card">
+        <h3>${escapeHTML(hotel.hotelName)}</h3>
+        <p>${escapeHTML(hotel.city)}</p>
+        <p>${escapeHTML(hotel.address)}</p>
+        <p>${escapeHTML(hotel.description)}</p>
+        <button type="button" class="view-rooms"
+          data-hotel-id="${hotel.id}">
+          View Rooms
+        </button>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    hotelList.innerHTML = `<p>${escapeHTML(error.message)}</p>`;
+  }
+}
+
+loadHotels();
+
+document.querySelector("#hotelList").addEventListener("click", async (event) => {
+  const button = event.target.closest(".view-rooms");
+
+  if (!button) return;
+
+  const hotelId = button.dataset.hotelId;
+  const hotelList = document.querySelector("#hotelList");
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/rooms/hotel/${hotelId}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Unable to load rooms.");
+    }
+
+    const rooms = await response.json();
+
+    if (rooms.length === 0) {
+      hotelList.innerHTML = "<p>No rooms available.</p>";
+      return;
+    }
+
+    hotelList.innerHTML = rooms.map(room => `
+      <div class="trip-card">
+        <h3>${escapeHTML(room.roomType)}</h3>
+        <p>Capacity: ${room.capacity} guests</p>
+        <p>Price: ₹${room.pricePerNight} per night</p>
+        <p>Available rooms: ${room.totalRooms}</p>
+        <button type="button" class="book-hotel-room"
+          data-room-id="${room.id}">
+          Book This Room
+        </button>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    hotelList.innerHTML = `<p>${escapeHTML(error.message)}</p>`;
+  }
+});
+
+// Show hotel booking form
+document.querySelector("#hotelList").addEventListener("click", (event) => {
+  const button = event.target.closest(".book-hotel-room");
+
+  if (!button) return;
+
+  const roomId = button.dataset.roomId;
+
+  document.querySelector("#hotelList").innerHTML = `
+    <div class="trip-card">
+      <h3>Book Your Hotel Room</h3>
+
+      <form id="hotelBookingForm">
+        <label>Guest Name</label>
+        <input type="text" id="hotelGuestName" required>
+
+        <label>Number of Guests</label>
+        <input type="number" id="hotelGuestCount"
+          min="1" value="1" required>
+
+        <label>Check-in Date</label>
+        <input type="date" id="hotelCheckIn" required>
+
+        <label>Check-out Date</label>
+        <input type="date" id="hotelCheckOut" required>
+
+        <button type="submit">Confirm Hotel Booking</button>
+      </form>
+    </div>
+  `;
+
+  document.querySelector("#hotelBookingForm").dataset.roomId = roomId;
+});
+
+// Submit hotel booking
+document.querySelector("#hotelList").addEventListener("submit", async (event) => {
+  if (event.target.id !== "hotelBookingForm") return;
+
+  event.preventDefault();
+
+  const form = event.target;
+
+  const bookingData = {
+    guestName: document.querySelector("#hotelGuestName").value,
+    guestCount: Number(document.querySelector("#hotelGuestCount").value),
+    checkInDate: document.querySelector("#hotelCheckIn").value,
+    checkOutDate: document.querySelector("#hotelCheckOut").value,
+    room: {
+      id: Number(form.dataset.roomId)
+    }
+  };
+
+  try {
+    const response = await fetch("http://localhost:8080/api/hotel-bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(bookingData)
+    });
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    const booking = await response.json();
+
+    document.querySelector("#hotelList").innerHTML = `
+      <div class="trip-card">
+        <h3>Hotel Booking Confirmed!</h3>
+        <p>Guest: ${escapeHTML(booking.guestName)}</p>
+        <p>Total Price: ₹${booking.totalPrice}</p>
+        <p>Status: ${escapeHTML(booking.status)}</p>
+      </div>
+    `;
+
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+/* =========================================================
+   MY HOTEL BOOKINGS
+   ========================================================= */
+
+const myHotelBookingsSection = document.createElement("section");
+
+myHotelBookingsSection.id = "myHotelBookings";
+
+myHotelBookingsSection.innerHTML = `
+  <div class="my-bookings-container">
+    <h2>My Hotel Bookings</h2>
+
+    <button id="loadHotelBookings" type="button">
+      View My Hotel Bookings
+    </button>
+
+    <div id="hotelBookingsContent">
+      <p>Click the button to view your hotel bookings.</p>
+    </div>
+  </div>
+`;
+
+document.querySelector("#app").appendChild(myHotelBookingsSection);
+document.querySelector("#loadHotelBookings").addEventListener("click", async () => {
+  const content = document.querySelector("#hotelBookingsContent");
+
+  content.innerHTML = "<p>Loading hotel bookings...</p>";
+
+  try {
+    const response = await fetch("http://localhost:8080/api/hotel-bookings");
+
+    if (!response.ok) {
+      throw new Error("Unable to load hotel bookings.");
+    }
+
+    const bookings = await response.json();
+
+    if (bookings.length === 0) {
+      content.innerHTML = "<p>No hotel bookings found.</p>";
+      return;
+    }
+
+    content.innerHTML = bookings.map(booking => `
+      <div class="trip-card">
+        <h3>${escapeHTML(booking.hotel.hotelName)}</h3>
+        <p>Guest: ${escapeHTML(booking.guestName)}</p>
+        <p>Guests: ${booking.guestCount}</p>
+        <p>Check-in: ${booking.checkInDate}</p>
+        <p>Check-out: ${booking.checkOutDate}</p>
+        <p>Total: ₹${booking.totalPrice}</p>
+        <p>Status: ${escapeHTML(booking.status)}</p>
+        ${booking.status === "Confirmed" ? `
+  <button type="button" class="cancel-hotel-booking"
+    data-booking-id="${booking.id}">
+    Cancel Booking
+  </button>
+` : ""}
+      </div>
+    `).join("");
+
+  } catch (error) {
+    content.innerHTML = `<p>${escapeHTML(error.message)}</p>`;
+  }
+});
+
+document.querySelector("#hotelBookingsContent").addEventListener("click", async (event) => {
+  const button = event.target.closest(".cancel-hotel-booking");
+
+  if (!button) return;
+
+  const bookingId = button.dataset.bookingId;
+
+  if (!confirm("Are you sure you want to cancel this hotel booking?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/hotel-bookings/${bookingId}/cancel`,
+      {
+        method: "PUT"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    alert("Hotel booking cancelled successfully!");
+
+    document.querySelector("#loadHotelBookings").click();
+
+  } catch (error) {
+    alert(error.message);
+  }
+});
