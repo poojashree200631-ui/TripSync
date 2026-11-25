@@ -4425,8 +4425,6 @@ document.querySelector("#hotelList").addEventListener("submit", async (event) =>
 
   event.preventDefault();
 
-  const form = event.target;
-
   const bookingData = {
     guestName: document.querySelector("#hotelGuestName").value,
     guestCount: Number(document.querySelector("#hotelGuestCount").value),
@@ -4560,5 +4558,322 @@ document.querySelector("#hotelBookingsContent").addEventListener("click", async 
 
   } catch (error) {
     alert(error.message);
+  }
+});
+
+/* =========================================================
+   PHASE 3 - TRIP EXPENSE MANAGEMENT
+   ========================================================= */
+
+const expenseSection = document.createElement("section");
+
+expenseSection.id = "expenses";
+
+expenseSection.innerHTML = `
+  <div class="my-bookings-container">
+    <h2>Trip Expense Management</h2>
+    <p>Add and manage your shared trip expenses.</p>
+
+    <form id="expenseForm">
+      <label>Expense Description</label>
+      <input type="text" id="expenseDescription" required>
+
+      <label>Amount (₹)</label>
+      <input type="number" id="expenseAmount" min="0.01" step="0.01" required>
+
+      <label>Paid By</label>
+      <input type="text" id="expensePaidBy" required>
+
+      <label>Expense Date</label>
+      <input type="date" id="expenseDate" required>
+
+      <label>Split Type</label>
+      <select id="expenseSplitType" required>
+      <option value="Equal">Equal</option>
+      <option value="Custom">Custom</option>
+      </select>
+      <div id="customSplitFields" style="display: none;">
+      <label>Enter Each Person's Share (₹), separated by commas</label>
+      <input type="text" id="customSplitAmounts"
+         placeholder="Example: 300, 200, 300">
+          </div>
+        <label>People Sharing (Enter names separated by commas)</label>
+        <input type="text" id="expensePeople"
+      placeholder="Neha, Rahul, Priya" required>
+      <label>Number of People Sharing</label>
+      <input type="number" id="expenseSplitBetween"
+      min="1" value="1" required>
+
+      <button type="submit">Add Expense</button>
+    </form>
+
+    <h3>All Trip Expenses</h3>
+    <button type="button" id="loadExpenses">View Expenses</button>
+
+    <div id="expensesContent">
+      <p>Click View Expenses to see your expenses.</p>
+    </div>
+  </div>
+`;
+
+document.querySelector("#app").appendChild(expenseSection);
+document.querySelector("#expenseSplitType").addEventListener("change", () => {
+  const customFields = document.querySelector("#customSplitFields");
+
+  customFields.style.display =
+    document.querySelector("#expenseSplitType").value === "Custom"
+      ? "block"
+      : "none";
+});
+
+// Add a new expense
+document.querySelector("#expenseForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (document.querySelector("#expenseSplitType").value === "Custom") {
+  const amounts = document.querySelector("#customSplitAmounts").value
+    .split(",")
+    .map(value => Number(value.trim()));
+
+  const total = Number(document.querySelector("#expenseAmount").value);
+  const people = Number(document.querySelector("#expenseSplitBetween").value);
+
+  if (
+    amounts.length !== people ||
+    amounts.some(value => !Number.isFinite(value) || value <= 0) ||
+    Math.abs(amounts.reduce((sum, value) => sum + value, 0) - total) > 0.01
+  ) {
+    alert("Enter one valid share per person. All shares must add up to the total amount.");
+    return;
+  }
+}
+
+  const expenseData = {
+    description: document.querySelector("#expenseDescription").value,
+    amount: Number(document.querySelector("#expenseAmount").value),
+    paidBy: document.querySelector("#expensePaidBy").value,
+    expenseDate: document.querySelector("#expenseDate").value,
+    splitBetween: Number(document.querySelector("#expenseSplitBetween").value),
+    expensePeople: document.querySelector("#expensePeople").value,
+    customSplitAmounts: document.querySelector("#customSplitAmounts").value,
+    splitType: document.querySelector("#expenseSplitType").value
+  };
+
+  try {
+    const response = await fetch("http://localhost:8080/api/expenses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(expenseData)
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to add expense.");
+    }
+
+    alert("Expense added successfully!");
+
+    document.querySelector("#expenseForm").reset();
+    document.querySelector("#loadExpenses").click();
+
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+// Load all expenses
+document.querySelector("#loadExpenses").addEventListener("click", async () => {
+  const content = document.querySelector("#expensesContent");
+
+  content.innerHTML = "<p>Loading expenses...</p>";
+
+  try {
+    const response = await fetch("http://localhost:8080/api/expenses");
+
+    if (!response.ok) {
+      throw new Error("Unable to load expenses.");
+    }
+
+    const expenses = await response.json();
+
+    if (expenses.length === 0) {
+      content.innerHTML = "<p>No expenses added yet.</p>";
+      return;
+    }
+
+    content.innerHTML = expenses.map(expense => `
+      <div class="trip-card">
+        <h3>${escapeHTML(expense.description)}</h3>
+        <p>Amount: ₹${expense.amount}</p>
+        <p>Paid By: ${escapeHTML(expense.paidBy)}</p>
+        <p>Date: ${escapeHTML(expense.expenseDate)}</p>
+        <p>Split Type: ${escapeHTML(expense.splitType)}</p>
+        <p>People Sharing: ${expense.splitBetween || 1}</p>
+        ${
+       expense.splitType === "Custom"
+        ? `<p>Individual Shares: ₹${escapeHTML(expense.customSplitAmounts)}</p>`
+        : `<p>Each Person's Share: ₹${(
+        Number(expense.amount) /
+        Math.max(Number(expense.splitBetween) || 1, 1)
+        ).toFixed(2)}</p>`
+        }
+        <p>Split Between: ${expense.splitBetween} people</p>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    content.innerHTML = `<p>${escapeHTML(error.message)}</p>`;
+  }
+});
+
+/* =========================================================
+   WHO OWES WHOM - SETTLEMENT SECTION
+   ========================================================= */
+
+const settlementSection = document.createElement("section");
+
+settlementSection.id = "settlements";
+
+settlementSection.innerHTML = `
+  <div class="my-bookings-container">
+    <h2>Who Owes Whom</h2>
+    <p>Calculate how much each person owes or should receive.</p>
+
+    <button type="button" id="calculateSettlements">
+      Calculate Settlements
+    </button>
+
+    <div id="settlementsContent">
+      <p>Click the button to calculate settlements.</p>
+    </div>
+  </div>
+`;
+
+document.querySelector("#app").appendChild(settlementSection);
+document.querySelector("#calculateSettlements").addEventListener("click", async () => {
+  const content = document.querySelector("#settlementsContent");
+
+  content.innerHTML = "<p>Calculating settlements...</p>";
+
+  try {
+    const response = await fetch("http://localhost:8080/api/expenses");
+
+    if (!response.ok) {
+      throw new Error("Unable to load expenses.");
+    }
+
+    const expenses = await response.json();
+    const balances = {};
+    let skipped = 0;
+
+    expenses.forEach(expense => {
+      const people = (expense.expensePeople || "")
+        .split(",")
+        .map(name => name.trim())
+        .filter(Boolean);
+
+      const count = Number(expense.splitBetween);
+      const total = Math.round(Number(expense.amount) * 100);
+      const payer = (expense.paidBy || "").trim();
+
+      if (
+        !people.length ||
+        people.length !== count ||
+        !payer ||
+        !people.some(name => name.toLowerCase() === payer.toLowerCase()) ||
+        !Number.isFinite(total) ||
+        total <= 0
+      ) {
+        skipped++;
+        return;
+      }
+
+      let shares = [];
+
+      if (expense.splitType === "Custom") {
+        shares = (expense.customSplitAmounts || "")
+          .split(",")
+          .map(value => Math.round(Number(value.trim()) * 100));
+
+        if (
+          shares.length !== people.length ||
+          shares.some(value => !Number.isFinite(value) || value <= 0) ||
+          shares.reduce((sum, value) => sum + value, 0) !== total
+        ) {
+          skipped++;
+          return;
+        }
+      } else {
+        const base = Math.floor(total / people.length);
+        let remainder = total % people.length;
+
+        shares = people.map(() => {
+          const share = base + (remainder > 0 ? 1 : 0);
+          remainder--;
+          return share;
+        });
+      }
+
+      people.forEach((person, index) => {
+        balances[person] = (balances[person] || 0) - shares[index];
+      });
+
+      balances[payer] = (balances[payer] || 0) + total;
+    });
+
+    const debtors = [];
+    const creditors = [];
+
+    Object.entries(balances).forEach(([person, balance]) => {
+      if (balance < 0) {
+        debtors.push({ person, amount: -balance });
+      } else if (balance > 0) {
+        creditors.push({ person, amount: balance });
+      }
+    });
+
+    const settlements = [];
+
+    let i = 0;
+    let j = 0;
+
+    while (i < debtors.length && j < creditors.length) {
+      const amount = Math.min(
+        debtors[i].amount,
+        creditors[j].amount
+      );
+
+      settlements.push({
+        from: debtors[i].person,
+        to: creditors[j].person,
+        amount
+      });
+
+      debtors[i].amount -= amount;
+      creditors[j].amount -= amount;
+
+      if (debtors[i].amount === 0) i++;
+      if (creditors[j].amount === 0) j++;
+    }
+
+    if (settlements.length === 0) {
+      content.innerHTML = "<p>No pending settlements found.</p>";
+    } else {
+      content.innerHTML = settlements.map(item => `
+        <div class="trip-card">
+          <h3>${escapeHTML(item.from)} owes ${escapeHTML(item.to)}</h3>
+          <p>Amount: ₹${(item.amount / 100).toFixed(2)}</p>
+        </div>
+      `).join("");
+    }
+
+    if (skipped > 0) {
+      content.innerHTML += `
+        <p>${skipped} older or incomplete expense record(s) were skipped.</p>
+      `;
+    }
+
+  } catch (error) {
+    content.innerHTML = `<p>${escapeHTML(error.message)}</p>`;
   }
 });

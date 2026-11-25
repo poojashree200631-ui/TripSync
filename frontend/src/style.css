@@ -2765,3 +2765,61 @@ a {
 #myHotelBookings .cancel-hotel-booking:hover {
   background: #b02a37;
 }
+
+/* =========================================================
+   TRIPSYNC - EXPENSE FORM STYLING
+   ========================================================= */
+
+#expenses #expenseForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 650px;
+  margin-top: 20px;
+}
+
+#expenses #expenseForm label {
+  display: block;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+#expenses #expenseForm input,
+#expenses #expenseForm select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+#expenses #expenseForm button,
+#expenses #loadExpenses,
+#settlements #calculateSettlements {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #142b35;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#expenses #expenseForm button:hover,
+#expenses #loadExpenses:hover,
+#settlements #calculateSettlements:hover {
+  background: #294957;
+}
+
+#expenses #customSplitFields {
+  margin-top: 10px;
+}
+
+#expenses .trip-card,
+#settlements .trip-card {
+  margin-top: 15px;
+  padding: 18px;
+  border-radius: 12px;
+}
