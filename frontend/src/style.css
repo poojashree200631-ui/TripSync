@@ -2823,3 +2823,40 @@ a {
   padding: 18px;
   border-radius: 12px;
 }
+
+/* SPACING FOR EXPENSE AND SETTLEMENT SECTIONS */
+
+#expenses,
+#settlements {
+  display: block;
+  padding: 50px 6%;
+  margin: 0;
+  background: #f3eee5;
+}
+
+@media (max-width: 650px) {
+  #expenses,
+  #settlements {
+    padding: 35px 15px;
+  }
+}
+
+/* ALL TRIP EXPENSES SPACING */
+
+#expenses h3 {
+  margin-top: 40px;
+  margin-bottom: 18px;
+}
+
+#expenses #loadExpenses {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+#expenses #expensesContent {
+  margin-top: 20px;
+}
+
+#expenses #expensesContent .trip-card {
+  margin-bottom: 20px;
+}

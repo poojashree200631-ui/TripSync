@@ -4431,7 +4431,7 @@ document.querySelector("#hotelList").addEventListener("submit", async (event) =>
     checkInDate: document.querySelector("#hotelCheckIn").value,
     checkOutDate: document.querySelector("#hotelCheckOut").value,
     room: {
-      id: Number(form.dataset.roomId)
+      id: Number(event.target.dataset.roomId)
     }
   };
 
